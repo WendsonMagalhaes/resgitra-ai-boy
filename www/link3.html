@@ -10,15 +10,13 @@
     <!-- Color theme for statusbar (Android only) -->
     <meta name="theme-color" content="#2196f3">
     <!-- Your app title -->
-    <title>Template Tab</title>
+    <title>My App</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css">
     <!-- CSS PERSONALIZADO PARA MENU-->
     <link rel="stylesheet" href="css/personalizado.css">
     <!--Ícones Material Design-->
     <link rel="stylesheet" href="css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="css/index.css">
-
 
 
 </head>
@@ -29,50 +27,22 @@
 
         <!-- Your main view, should have "view-main" class -->
         <div class="view view-main">
-
-            <!-- TAB BAR-->
-            <div class="toolbar toolbar-bottom">
-                <div class="toolbar-inner display-flex">
-                    <a href="/index/" class="tab-link link active">
-                        <i class="mdi mdi-home"></i>
-                        <span>Link 1</span>
-                    </a>
-                    <a href="/www/link2.html" class="tab-link link">
-                        <i class="mdi mdi-link"></i>
-                        <span>Link 2</span>
-                    </a>
-                    <a href="/link3/" class="tab-link link">
-                        <i class="mdi mdi-account"></i>
-                        <span>Link 3</span>
-                    </a>
-
-                </div>
-            </div>
-
             <!-- Initial Page, "data-name" contains page name -->
-            <div data-name="index" class="page color-theme-blue">
+            <div data-name="link3" class="page">
 
                 <!-- Top Navbar -->
                 <div class="navbar">
                     <div class="navbar-bg"></div>
                     <div class="navbar-inner justify-content-center">
-                        <div class="title ">Resgitra aí Boy</div>
+                        <div class="title ">Link 3</div>
                     </div>
                 </div>
 
-                <div class="login-container">
-                    <h2>Faça o Login</h2>
-                    <form method="post">
-                        <div class="input-group">
-                            <input type="text" name="login" placeholder="Usuário" required/>
-                        </div>
-                        <div class="input-group">
-                            <input type="password" name="password" placeholder="Senha" required/>
-                        </div>
-                        <div class="input-group">
-                            <input type="submit" name="acao" value="Login"/>
-                        </div>
-                    </form>
+                <!-- Scrollable page content -->
+                <div class="page-content">
+                    <div class="block">
+                        Conteúdo do link 3
+                    </div>
                 </div>
             </div>
         </div>
