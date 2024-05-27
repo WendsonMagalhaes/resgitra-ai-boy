@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const { getAuthSheets } = require('./auth'); // Importe a função getAuthSheets do seu arquivo de autenticação
 const router = express.Router();
 
-const port = 3030;
+const port = 3033;
 var path = require('path');
 const app = express();
 
@@ -37,6 +37,8 @@ app.use('/css', express.static(path.join(__dirname, 'css')));
 
 
 app.post('/', (req, res) => {
+    let errorMessage = ""; // Inicializa a mensagem de erro como uma string vazia
+
     if (req.body.password == passwordAdriano && req.body.login.toLowerCase() == loginAdriano) {
         req.session.login = loginAdriano;
         usuario = loginAdriano;
@@ -51,9 +53,13 @@ app.post('/', (req, res) => {
         usuario = loginOscar
         res.render('home', { login: usuario });
     } else {
-        res.render('index');
+        errorMessage = "Login ou senha incorretos. Por favor, tente novamente."; // Define a mensagem de erro
+        res.render('index', { errorMessage: errorMessage }); // Passa a mensagem de erro para o modelo
     }
 
+});
+app.get('/', (req, res) => {
+    res.render('index', { errorMessage: "" }); // Passa uma mensagem de erro vazia para o modelo
 });
 app.get('/', (req, res) => {
     if (req.session.login) {
@@ -95,14 +101,20 @@ app.post("/addRow", async (req, res) => {
         res.status(500).send('Erro interno do servidor');
     }
 });
-app.use(express.static('views', {
+app.use(express.static('css', {
     setHeaders: (res, path) => {
         if (path.endsWith('.css')) {
             res.set('Content-Type', 'text/css');
         }
     }
 }));
-
-
+// Serve arquivos estáticos do diretório 'js'
+app.use(express.static(path.join(__dirname, 'js'), {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.js')) {
+            res.set('Content-Type', 'text/javascript');
+        }
+    }
+}));
 
   
