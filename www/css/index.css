@@ -71,3 +71,12 @@ input::placeholder {
         padding: 1rem;
     }
 }
+.navbar-bg{
+    background-color: #2196F3;
+    color: #fff;
+   
+
+}
+.title{
+    color: #fff;
+}
