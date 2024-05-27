@@ -30,6 +30,11 @@ app.use('/', router); // Use o roteador express
 app.listen(process.env.PORT || port, () => {
     console.log('SERVIDOR RODANDO')
 });
+app.use(express.static(path.join(__dirname, 'www')));
+app.use('/lib', express.static(path.join(__dirname, 'lib')));
+app.use('/css', express.static(path.join(__dirname, 'css')));
+
+
 
 app.post('/', (req, res) => {
     if (req.body.password == passwordAdriano && req.body.login.toLowerCase() == loginAdriano) {
@@ -90,6 +95,14 @@ app.post("/addRow", async (req, res) => {
         res.status(500).send('Erro interno do servidor');
     }
 });
+app.use(express.static('views', {
+    setHeaders: (res, path) => {
+        if (path.endsWith('.css')) {
+            res.set('Content-Type', 'text/css');
+        }
+    }
+}));
+
 
 
   
