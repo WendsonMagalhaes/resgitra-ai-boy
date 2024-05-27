@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -10,161 +9,284 @@
     <!-- Color theme for statusbar (Android only) -->
     <meta name="theme-color" content="#2196f3">
     <!-- Your app title -->
-    <title>Template Tab</title>
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css">
-    <!-- CSS PERSONALIZADO PARA MENU-->
-    <link rel="stylesheet" href="/www/css/personalizado.css">
-    <!--Ícones Material Design-->
-    <link rel="stylesheet" href="css/materialdesignicons.min.css">
-    <link rel="stylesheet" href="css/home.css">
+   
 
+        <!-- CSS PERSONALIZADO PARA MENU-->
+        <link rel="stylesheet" href="css/personalizado.css">
+        <!--Ícones Material Design-->
+        <link rel="stylesheet" href="css/materialdesignicons.min.css">
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buscar Contrato</title>
+  <script src="https://apis.google.com/js/api.js"></script>
+
+  <!-- Your app title -->
+  <title>Template Tab</title>
+  <!-- Path to Framework7 Library Bundle CSS -->
+  <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+  <!-- CSS PERSONALIZADO PARA MENU-->
+  <link rel="stylesheet" href="css/personalizado.css">
+  <!--Ícones Material Design-->
+  <link rel="stylesheet" href="css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="css/home.css">
 
 
 </head>
-
 <body>
-    <!-- App root element -->
-    <div id="app">
 
-        <!-- Your main view, should have "view-main" class -->
-        <div class="view view-main">
+   <!-- App root element -->
+   <div id="app">
 
-            <!-- TAB BAR-->
-            <div class="toolbar toolbar-bottom">
-                <div class="toolbar-inner display-flex">
-                    <a href="/index/" class="tab-link link active">
-                        <i class="mdi mdi-home"></i>
-                        <span>Link 1</span>
-                    </a>
-                    <a href="/www/link2.html" class="tab-link link">
-                        <i class="mdi mdi-link"></i>
-                        <span>Link 2</span>
-                    </a>
-                    <a href="/link3/" class="tab-link link">
-                        <i class="mdi mdi-account"></i>
-                        <span>Link 3</span>
-                    </a>
+    <!-- Your main view, should have "view-main" class -->
+    <div class="view view-main">
+        <!-- Initial Page, "data-name" contains page name -->
+        <div data-name="link2" class="page">
 
+            <!-- Top Navbar -->
+            <div class="navbar">
+                <div class="navbar-bg"></div>
+                <div class="navbar-inner justify-content-center">
+                    <div class="title ">Buscar Contrato</div>
                 </div>
             </div>
 
-            <!-- Initial Page, "data-name" contains page name -->
-            <div data-name="index" class="page color-theme-blue">
-
-                <!-- Top Navbar -->
-                <div class="navbar">
-                    <div class="navbar-bg"></div>
-                    <div class="navbar-inner justify-content-center">
-                        <div class="title ">Resgitra aí Boy</div>
-                    </div>
+            <!-- Scrollable page content -->
+            <div class="page-content">
+                <div class="block">
+                  <h1>Buscar Contrato</h1>
+                  <input type="text" id="contractNumber" placeholder="Digite o número do contrato">
+                  <button id="searchButton">Buscar</button>
+                  <button id="writeButton" onclick="enviarDados()">Gravar na Planilha</button>
+                
+                  <div id="result"></div>
+                  <!-- Os resultados da busca serão adicionados aqui -->
+                  <label id = "label-contrato">Contrato:</label>
+                <input id = "input-contrato" name = "input-contrato" />
+                <label id = "label-nome">Nome:</label>
+                <input id = "input-nome"/>
+                <label id = "label-data-ativacao">Data de Ativação:</label>
+                <input id = "input-data-ativacao"/>
+                <label id = "label-forma-de-pagamento">Forma de Pagamento:</label>
+                <input id = "input-forma-de-pagamento"/>
+                <label id = "label-total-parcelas">Parcelas em Atraso:</label>
+                <input id = "input-total-parcelas"/>
+                <label id = "label-total-debito">Débito:</label>
+                <input id = "input-total-debito"/>
                 </div>
-
-                <div class="page-content">
-                  <div class="block">
-                    <h1>Buscar Contrato</h1>
-                    <input type="text" id="contractNumber" placeholder="Digite o número do contrato">
-                    <button id="searchButton">Buscar</button>
-                    <button id="writeButton" onclick="enviarDados()">Gravar na Planilha</button>
-                  
-                    <div id="result"></div>
-                    <!-- Os resultados da busca serão adicionados aqui -->
-                    <label id = "label-contrato">Contrato:</label>
-                  <input id = "input-contrato" name = "input-contrato" />
-                  <label id = "label-nome">Nome:</label>
-                  <input id = "input-nome"/>
-                  <label id = "label-data-ativacao">Data de Ativação:</label>
-                  <input id = "input-data-ativacao"/>
-                  <label id = "label-forma-de-pagamento">Forma de Pagamento:</label>
-                  <input id = "input-forma-de-pagamento"/>
-                  <label id = "label-total-parcelas">Parcelas em Atraso:</label>
-                  <input id = "input-total-parcelas"/>
-                  <label id = "label-total-debito">Débito:</label>
-                  <input id = "input-total-debito"/>
-                  </div>
-              </div>
             </div>
         </div>
     </div>
-    <!-- Path to Framework7 Library Bundle JS-->
-    <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
-	<!-- jQuery -->
-	<script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>	
-    <!-- Roteamento do app-->
-    <script type="text/javascript" src="js/routes.js"></script>
-    <script src="cordova.js"></script>
-    <style>
-      /* Estilos para a página de busca de contrato */
+    <div class="toolbar toolbar-bottom">
+      <div class="toolbar-inner display-flex">
+          <a href="/index/" class="tab-link link active">
+              <i class="mdi mdi-home"></i>
+              <span>Link 1</span>
+          </a>
+          <a href="/www/link2.html" class="tab-link link">
+              <i class="mdi mdi-link"></i>
+              <span>Link 2</span>
+          </a>
+          <a href="/link3/" class="tab-link link">
+              <i class="mdi mdi-account"></i>
+              <span>Link 3</span>
+          </a>
 
-.page-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f0f0f0;
-}
+      </div>
+  </div>
 
-.block {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 90%;
-  max-width: 600px;
-}
+</div>
 
-h1 {
-  margin-bottom: 20px;
-  color: #333;
-}
+</div>
+  <!-- Path to Framework7 Library Bundle JS-->
+<script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
+<!-- jQuery -->
+<script type="text/javascript" src="lib/jquery-3.7.0.min.js"></script>	
+<!-- Roteamento do app-->
+<script type="text/javascript" src="js/routes.js"></script>
+<script src="cordova.js"></script>
+  <script>
+    const SPREADSHEET_ID = '1vn_5JYkVxWK6i3UnhuvVpg11Eb7sdbCVWRVW5ha-hCg';
+    const RANGE = 'Inadimplencia!A:M';
+    const API_KEY = 'AIzaSyB_rfYHUzFP0hF5dmQPUVxK88BoVF74HJo'; // Substitua 'YOUR_API_KEY' pela sua chave da API
 
-input[type="text"] {
-  width: calc(100% - 20px);
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-}
+    document.getElementById('searchButton').addEventListener('click', () => {
+      const contractNumber = document.getElementById('contractNumber').value;
+      if (!contractNumber) {
+        alert('Por favor, insira o número do contrato.');
+        return;
+      }
 
-button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+      searchValue(SPREADSHEET_ID, RANGE, contractNumber, displayResult);
+    });
 
-button:hover {
-  background-color: #0056b3;
-}
+    function searchValue(spreadsheetId, range, targetValue, callback) {
+        gapi.load('client', () => {
+          gapi.client.init({
+            apiKey: API_KEY,
+            discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+          }).then(() => {
+            return gapi.client.sheets.spreadsheets.values.get({
+              spreadsheetId: spreadsheetId,
+              range: range,
+            });
+          }).then((response) => {
+            const result = response.result;
+            const values = result.values;
+      
+            if (values && values.length > 0) {
+              // Implementação da busca binária
+              let low = 0;
+              let high = values.length - 1;
+              let targetRowIndex = -1;
+      
+              while (low <= high) {
+                let mid = Math.floor((low + high) / 2);
+                let row = values[mid][0]; // Assumindo que a primeira coluna contém os valores ordenados
+      
+                if (row === targetValue) {
+                  targetRowIndex = mid;
+                  break;
+                } else if (row < targetValue) {
+                  low = mid + 1;
+                } else {
+                  high = mid - 1;
+                }
+              }
+      
+              if (targetRowIndex !== -1) {
+                // Valor encontrado, chama o callback com o valor
+                const targetRow = values[targetRowIndex];
+                if (callback) callback(targetRow);
+              } else {
+                // Valor não encontrado
+                console.log(`Valor '${targetValue}' não encontrado.`);
+                document.getElementById('result').innerText = `Valor '${targetValue}' não encontrado.`;
+              }
+            } else {
+              // Nenhum valor na planilha
+              console.log('Nenhum valor na planilha.');
+              document.getElementById('result').innerText = 'Nenhum valor na planilha.';
+            }
+          }, (err) => {
+            console.error('Error: ', err.result.error.message);
+            document.getElementById('result').innerText = 'Erro ao buscar o contrato.';
+          });
+        });
+      }
+      
+      function updateValues(spreadsheetId, range, valueInputOption, _values, callback) {
+        let values = [
+          [
+            // Cell values ...
+          ],
+          // Additional rows ...
+        ];
+        values = _values;
+        const body = {
+          values: values,
+        };
 
-#result {
-  margin-top: 20px;
-  text-align: left;
-}
+        
+        try {
+          gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: spreadsheetId,
+            range: range,
+            valueInputOption: valueInputOption,
+            resource: body,
+          }).then((response) => {
+            const result = response.result;
+            console.log(`${result.updatedCells} cells updated.`);
+            if (callback) callback(response);
+          });
+        } catch (err) {
+          document.getElementById('content').innerText = err.message;
+          return;
+        }
+      }
+    function displayResult(row) {
+      document.getElementById('input-contrato').value = row[0];
+      document.getElementById('input-nome').value = row[4];
+      document.getElementById('input-data-ativacao').value = row[3];
+      document.getElementById('input-forma-de-pagamento').value= row[1];
+      document.getElementById('input-total-parcelas').value = row[2];
+      document.getElementById('input-total-debito').value = row[6];
 
-label {
-  display: block;
-  margin-top: 10px;
-  color: #333;
-}
 
-input[type="text"] {
-  width: calc(100% - 120px);
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
-}
+      
+    }
 
-    </style>
+    /**document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('writeButton').addEventListener('click', function() {
+            // Aqui você coloca o código para chamar a função writeDataToSheet()
+            const spreadsheetId = '1aGQdlahYel9zjLBa7r4od7LdupBsyoB-_bVP57tBIsM';
+            const range = 'Consolidado!A2';
+            const data = [['Dado 1', 'Dado 2', 'Dado 3'], ['Dado 4', 'Dado 5', 'Dado 6']]; // Exemplo de dados a serem gravados
+            writeDataToSheet(spreadsheetId, range, data);
+        });
+    });
+    
+    function writeDataToSheet(spreadsheetId, range, data) {
+      gapi.load('client', () => {
+        gapi.client.init({
+          apiKey: API_KEY,
+          discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+        }).then(() => {
+          return gapi.client.sheets.spreadsheets.values.update({
+            spreadsheetId: spreadsheetId,
+            range: range,
+            valueInputOption: 'RAW',
+            resource: { values: data }, // Certifique-se de que os dados estejam no formato correto
+          });
+        }).then((response) => {
+          console.log('Dados gravados com sucesso na planilha.');
+        }, (err) => {
+          console.error('Erro ao gravar dados na planilha: ', err);
+        });
+      });
+    }
+    **/
+
+    async function enviarDados() {
+        var dados = {
+            values:
+                [
+                document.getElementById('input-contrato').value,
+                document.getElementById('input-nome').value,
+                document.getElementById('input-data-ativacao').value,
+                document.getElementById('input-forma-de-pagamento').value,
+                document.getElementById('input-total-parcelas').value,
+                document.getElementById('input-total-debito').value
+                ]
+        };
+        try {
+            console.log('Enviando solicitação para adicionar nova linha:', JSON.stringify(dados));
+
+            const response = await fetch('/addRow', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dados)
+            });
+    
+            if (!response.ok) {
+                throw new Error('Erro ao adicionar nova linha: ' + response.statusText);
+            }
+    
+            const data = await response.json();
+            console.log('Nova linha adicionada:', data);
+            return data;
+        } catch (error) {
+            console.error('Erro ao adicionar nova linha:', error.message);
+            throw error;
+        }
+    }
+    
+  </script>
 </body>
-
 </html>
