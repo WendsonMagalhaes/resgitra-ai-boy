@@ -64,7 +64,7 @@ input[type="text"] {
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 20px;
-    border: 1px solid #2196F3;
+    border: 2px solid #2196F3;
     border-radius: 15px;
     font-size: 16px;
 }
@@ -126,9 +126,9 @@ input[type="text"] {
 .container-forma-de-pagamento {
     display: grid;
     grid-template-columns: 28% 10% 25% 28%; /* Define duas colunas de 30% cada */
-    gap: 15px; /* Espaçamento entre as colunas, opcional */
+    gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
-    margin-left: -15px; /* Adiciona uma margem à esquerda */
+    margin-left: -5px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
 
 
@@ -141,9 +141,9 @@ input[type="text"] {
 .container-debito {
     display: grid;
     grid-template-columns: 28% 10% 25% 30%; /* Define duas colunas de 30% cada */
-    gap: 15px; /* Espaçamento entre as colunas, opcional */
+    gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
-    margin-left: -15px; /* Adiciona uma margem à esquerda */
+    margin-left: -5px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
 
 
@@ -172,16 +172,16 @@ input[type="text"] {
     align-items: center; /* Centraliza verticalmente os elementos */
     justify-content: end; /* Alinha as colunas à esquerda */
     padding: 20px;
-    font-size: 18px; /* Tamanho do ícone */
+    font-size: 16px; /* Tamanho do ícone */
 
 
   }
   
   .user-info .username {
-    margin-left: 10px; /* Espaçamento entre o nome do usuário e o ícone */
+    margin-left: 5px; /* Espaçamento entre o nome do usuário e o ícone */
   }
   
   #icone-user {
-    font-size: 24px; /* Tamanho do ícone */
+    font-size: 22px; /* Tamanho do ícone */
     color: #fff; /* Cor do ícone */
   }
