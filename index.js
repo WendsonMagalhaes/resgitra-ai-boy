@@ -41,16 +41,16 @@ app.post('/', (req, res) => {
 
     if (req.body.password == passwordAdriano && req.body.login.toLowerCase() == loginAdriano) {
         req.session.login = loginAdriano;
-        usuario = loginAdriano;
+        usuario = loginAdriano.charAt(0).toUpperCase() + loginAdriano.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
     } else if (req.body.password == passwordDurval && req.body.login.toLowerCase() == loginDurval) {
         req.session.login = loginDurval;
-        usuario = loginDurval
+        usuario = loginDurval.charAt(0).toUpperCase() + loginDurval.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
     }
     else if (req.body.password == passwordOscar && req.body.login.toLowerCase() == loginOscar) {
         req.session.login = loginOscar;
-        usuario = loginOscar
+        usuario = loginOscar.charAt(0).toUpperCase() + loginOscar.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
     } else {
         errorMessage = "Login ou senha incorretos. Por favor, tente novamente."; // Define a mensagem de erro

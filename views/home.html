@@ -48,10 +48,21 @@
         <div data-name="link2" class="page">
             <!-- Top Navbar -->
             <div class="navbar">
-                <div class="navbar-bg"></div>
+                <div class="navbar-bg">
+                  <div class="user-info">
+                    <!-- Substitua 'Nome do Usuário' pelo nome do usuário passado para a página -->
+                  <i id = "icone-user" class="mdi mdi-account"></i>
+                    <span class="username">
+                      <%= login %>
+                    </span>
+                  
+                  </div>
+                </div>
                 <div class="navbar-inner justify-content-center">
                     <div class="title ">Buscar Contrato</div>
+                   
                 </div>
+                
             </div>
 
             <!-- Scrollable page content -->
@@ -138,17 +149,14 @@
         <div class="toolbar toolbar-bottom">
           <div class="toolbar-inner display-flex">
               <a href="/index/" class="tab-link link active">
-                  <i class="mdi mdi-home"></i>
-                  <span>Link 1</span>
+                  <i class="mdi mdi-border-color"></i>
+                  <span>Registrar</span>
               </a>
               <a href="/www/link2.html" class="tab-link link">
-                  <i class="mdi mdi-link"></i>
-                  <span>Link 2</span>
+                  <i class="mdi mdi-checkbox-multiple-marked"></i>
+                  <span>Registrados</span>
               </a>
-              <a href="/link3/" class="tab-link link">
-                  <i class="mdi mdi-account"></i>
-                  <span>Link 3</span>
-              </a>
+             
           </div>
           </div>
     </div>
