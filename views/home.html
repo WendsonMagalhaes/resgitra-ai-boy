@@ -220,36 +220,7 @@
       
     }
 
-    /**document.addEventListener('DOMContentLoaded', function() {
-        document.getElementById('writeButton').addEventListener('click', function() {
-            // Aqui você coloca o código para chamar a função writeDataToSheet()
-            const spreadsheetId = '1aGQdlahYel9zjLBa7r4od7LdupBsyoB-_bVP57tBIsM';
-            const range = 'Consolidado!A2';
-            const data = [['Dado 1', 'Dado 2', 'Dado 3'], ['Dado 4', 'Dado 5', 'Dado 6']]; // Exemplo de dados a serem gravados
-            writeDataToSheet(spreadsheetId, range, data);
-        });
-    });
-    
-    function writeDataToSheet(spreadsheetId, range, data) {
-      gapi.load('client', () => {
-        gapi.client.init({
-          apiKey: API_KEY,
-          discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
-        }).then(() => {
-          return gapi.client.sheets.spreadsheets.values.update({
-            spreadsheetId: spreadsheetId,
-            range: range,
-            valueInputOption: 'RAW',
-            resource: { values: data }, // Certifique-se de que os dados estejam no formato correto
-          });
-        }).then((response) => {
-          console.log('Dados gravados com sucesso na planilha.');
-        }, (err) => {
-          console.error('Erro ao gravar dados na planilha: ', err);
-        });
-      });
-    }
-    **/
+
 
     async function enviarDados() {
         var dados = {
