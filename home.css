@@ -172,16 +172,16 @@ input[type="text"] {
     align-items: center; /* Centraliza verticalmente os elementos */
     justify-content: end; /* Alinha as colunas à esquerda */
     padding: 20px;
-    font-size: 18px; /* Tamanho do ícone */
+    font-size: 16px; /* Tamanho do ícone */
 
 
   }
   
   .user-info .username {
-    margin-left: 10px; /* Espaçamento entre o nome do usuário e o ícone */
+    margin-left: 5px; /* Espaçamento entre o nome do usuário e o ícone */
   }
   
   #icone-user {
-    font-size: 24px; /* Tamanho do ícone */
+    font-size: 22px; /* Tamanho do ícone */
     color: #fff; /* Cor do ícone */
   }
