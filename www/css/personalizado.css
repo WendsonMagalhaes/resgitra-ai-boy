@@ -1,5 +1,6 @@
 .toolbar{
     height: 80px;
+    background-color: #2196F3;
 }
 
 .tab-link{
@@ -16,7 +17,7 @@
 }
 
 .toolbar-inner .link:not(.active){
-    color:gray;
+    color:white;
 	font-weight:normal;
 }
 

@@ -79,4 +79,6 @@ input::placeholder {
 }
 .title{
     color: #fff;
+    font-size: 20px;
+    font-weight:900px;
 }
