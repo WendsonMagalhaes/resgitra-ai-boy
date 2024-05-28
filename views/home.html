@@ -52,7 +52,7 @@
                   <div class="user-info">
                     <!-- Substitua 'Nome do Usuário' pelo nome do usuário passado para a página -->
                   <i id = "icone-user" class="mdi mdi-account"></i>
-                    <span class="username">
+                    <span class="username" id="output-username">
                       <%= login %>
                     </span>
                   
@@ -136,6 +136,13 @@
                 </div>
                <br>
             </div>
+            <!-- Elemento de carregamento -->
+            <div id="loading-spinner" class="loading-spinner"></div>
+
+            <div id="custom-message" class="custom-message">
+              <span class="message-text">Negociação Salva com Sucesso!</span>
+               <!-- <button id="close-button" class="close-button">Fechar</button> !-->
+          </div>
             <div id="cards-container" class="cards-container"></div>
                 <button id="writeButton" onclick="enviarDados()">Gravar na Planilha</button>
 

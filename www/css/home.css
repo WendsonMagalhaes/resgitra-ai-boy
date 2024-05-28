@@ -1,12 +1,11 @@
 /* Estilos para a página de busca de contrato */
 
 .page-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: block; /* Altere de flex para block */
     height: 100vh;
     background-color: #f0f0f0;
     overflow: auto; /* Adiciona a barra de rolagem quando necessário */
+    padding: 5px; /* Adicione algum preenchimento se necessário */
 }
 
 .block {
@@ -18,8 +17,7 @@
     width: 95%;
     max-width: 600px;
     overflow: auto; /* Adiciona a barra de rolagem quando necessário */
-    margin-bottom: 20px;
-    margin-top: 20px;
+    margin: 60px auto; /* Centraliza o bloco horizontalmente */
 
 }
 
@@ -83,6 +81,10 @@ input[type="text"] {
     font-size: 20px;
     font-weight:bold;    
 
+}
+.view{
+    overflow: auto; /* Adiciona a barra de rolagem quando necessário */
+ 
 }
 .container-buscar-contrato {
     display: grid;
@@ -269,3 +271,59 @@ input[type="text"] {
         width: calc(25% - 4px); /* Para telas maiores, os cartões ocupam 25% da largura do contêiner pai, com 16px de margem em cada lado */
     }
 }
+.custom-message {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    display: none;
+    border: 2px solid #007bff;  /* Azul mais escuro para o contorno */
+    font-weight: bold;
+    font-size: 18px;
+
+  }
+  
+
+.close-button {
+    background-color: #2196F3;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    float: right;
+}
+
+.close-button:hover {
+    background-color: #0056b3;
+}
+
+.message-text {
+    margin-right: 10px;
+}
+
+/* Estilos para o spinner de carregamento */
+.loading-spinner {
+    display: none; /* Inicialmente oculto */
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3; /* Cinza claro */
+    border-top: 5px solid #3498db; /* Azul */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animação de rotação */
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  

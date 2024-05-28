@@ -1,5 +1,5 @@
 const SPREADSHEET_ID = '1vn_5JYkVxWK6i3UnhuvVpg11Eb7sdbCVWRVW5ha-hCg';
-const RANGE = 'Inadimplencia!A:M';
+const RANGE = 'Inadimplencia!A:n';
 const API_KEY = 'AIzaSyB_rfYHUzFP0hF5dmQPUVxK88BoVF74HJo'; // Substitua 'YOUR_API_KEY' pela sua chave da API
 
 document.getElementById('searchButton').addEventListener('click', () => {
@@ -10,7 +10,7 @@ document.getElementById('searchButton').addEventListener('click', () => {
     alert('Por favor, insira o número do contrato.');
     return;
   }
-
+  showLoadingSpinner();
   searchValue(SPREADSHEET_ID, RANGE, contractNumber, displayResult);
   
 });
@@ -104,9 +104,11 @@ function searchValue(spreadsheetId, range, targetValue, callback) {
   }
 function displayResult(row) {
     document.getElementById('output-contrato').textContent = row[0];
+    document.getElementById('output-cliente').textContent = row[12];
     document.getElementById('output-nome').textContent = row[4];
     document.getElementById('output-endereco').textContent = row[7];
     document.getElementById('output-bairro').textContent = row[10];
+    document.getElementById('output-telefone').textContent = row[13];
     document.getElementById('output-forma-de-pagamento').textContent = row[1];
     document.getElementById('output-data-ativacao').textContent = row[11];
     document.getElementById('output-total-parcelas').textContent = row[2];
@@ -136,7 +138,7 @@ function displayResult(row) {
         });
         cardsContainer.appendChild(card);
     });
-
+    hideLoadingSpinner();
  
 }
 
@@ -160,15 +162,34 @@ function calcularAno(data_ativacao) {
 }
 
 async function enviarDados() {
+  showLoadingSpinner();
+  const selectedCards = document.querySelectorAll('.card.selected');
+  let selectedDescriptions = '';
+  let i = 1;
+  selectedCards.forEach(card => {
+      selectedDescriptions += `Proposta ${i}: `+ card.dataset.descricao + '\n';
+      i++;
+  });
+  console.log(selectedDescriptions);
+
     var dados = {
         values:
             [
-            document.getElementById('input-contrato').value,
-            document.getElementById('input-nome').value,
-            document.getElementById('input-data-ativacao').value,
-            document.getElementById('input-forma-de-pagamento').value,
-            document.getElementById('input-total-parcelas').value,
-            document.getElementById('input-total-debito').value
+              document.getElementById('output-contrato').textContent.trim(),
+              document.getElementById('output-cliente').textContent.trim(),
+              document.getElementById('output-nome').textContent.trim(),
+              document.getElementById('output-endereco').textContent.trim(),
+              document.getElementById('output-bairro').textContent.trim(),
+              document.getElementById('output-telefone').textContent.trim(),
+              document.getElementById('output-forma-de-pagamento').textContent.trim(),
+              document.getElementById('output-data-ativacao').textContent.trim(),
+              document.getElementById('output-total-parcelas').textContent.trim(),
+              document.getElementById('output-total-debito').textContent.trim(),
+              document.getElementById('output-username').textContent.trim(),
+            "Cobrança feita pelo Motoboy " + document.getElementById('output-username').textContent.trim() +
+             '\n' +  "Cliente ficou de ir em Loja ou retornar para a Central"+ '\n' +"Negociação feita:" + '\n' + selectedDescriptions
+             + '\n' + '\n' + "OBS: Considerar apenas uma proposta de negociação"  + '\n' +  "Wendson"
+
             ]
     };
     try {
@@ -185,15 +206,47 @@ async function enviarDados() {
         if (!response.ok) {
             throw new Error('Erro ao adicionar nova linha: ' + response.statusText);
         }
-
         const data = await response.json();
         console.log('Nova linha adicionada:', data);
+        // Exibe a mensagem personalizada
+        hideLoadingSpinner()
+        showCustomMessage();
+
+        // Aguarda 3 segundos antes de recarregar a página
+        setTimeout(function() {
+            window.location.reload();
+        }, 1500); // 3000 milissegundos = 3 segundos
+
+
         return data;
+
+        
     } catch (error) {
         console.error('Erro ao adicionar nova linha:', error.message);
         throw error;
     }
+    
 }
+// Função para mostrar o spinner de carregamento
+function showLoadingSpinner() {
+  document.getElementById('loading-spinner').style.display = 'block';
+}
+
+// Função para ocultar o spinner de carregamento
+function hideLoadingSpinner() {
+  document.getElementById('loading-spinner').style.display = 'none';
+}
+// Exibe a caixa de mensagem personalizada
+function showCustomMessage() {
+  document.getElementById('custom-message').style.display = 'block';
+}
+
+/** Fecha a caixa de mensagem personalizada
+document.getElementById('close-button').addEventListener('click', function() {
+  document.getElementById('custom-message').style.display = 'none';
+});*/ 
+
+
 function obterDescontos(parcelas, ano) {
     if (propostasDescontos[parcelas] && propostasDescontos[parcelas][ano]) {
         return propostasDescontos[parcelas][ano];
@@ -202,135 +255,135 @@ function obterDescontos(parcelas, ano) {
 }
 const propostasDescontos = {
     2: {
-        1: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'ofertado parcelamento em 2 vezes' },
-        { desconto: "5% de Desconto", descricao: 'ofertado desconto de 5%' },
+        1: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'Ofertado parcelamento em 2 vezes' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        2: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'ofertado parcelamento em 2 vezes' },
-        { desconto: "10% de Desconto", descricao: 'ofertado desconto de 10%' },
+        2: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'Ofertado parcelamento em 2 vezes' },
+        { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        3: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-        { desconto: "15% de Desconto", descricao: 'ofertado desconto de 15%' },
-        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 2 vezes' },
+        3: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+        { desconto: "15% de Desconto", descricao: 'Ofertado desconto de 15%' },
+        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 2 vezes' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        4: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-        { desconto: "20% de Desconto", descricao: 'ofertado desconto de 20%' },
-        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 2 vezes' },
+        4: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+        { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
+        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 2 vezes' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ]
     },
     3: {
-        1: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'ofertado parcelamento em 3 vezes' },
-        { desconto: "5% de Desconto", descricao: 'ofertado desconto de 5%' },
+        1: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'Ofertado parcelamento em 3 vezes' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        2: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'ofertado parcelamento em 3 vezes' },
-        { desconto: "15% de Desconto", descricao: 'ofertado desconto de 15%' },
-        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'ofertado desconto de 5% mais parcelameno em 2 vezes' },
+        2: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'Ofertado parcelamento em 3 vezes' },
+        { desconto: "15% de Desconto", descricao: 'Ofertado desconto de 15%' },
+        { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 2 vezes' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        3: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'ofertado parcelamento em 6 vezes' },
-        { desconto: "20% de Desconto", descricao: 'ofertado desconto de 20%' },
-        { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 3 vezes' },
-        { desconto: "Isenção de 1 parcela", descricao: 'ofertado isenção de 1 parcela' },
+        3: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'Ofertado parcelamento em 6 vezes' },
+        { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
+        { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 3 vezes' },
+        { desconto: "Isenção de 1 parcela", descricao: 'Ofertado isenção de 1 parcela' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        4: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'ofertado parcelamento em 6 vezes' },
-        { desconto: "25% de Desconto", descricao: 'ofertado desconto de 25%' },
-        { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 3 vezes' },
-        { desconto: "Isenção de 1 parcela", descricao: 'ofertado isenção de 1 parcela' },
+        4: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'Ofertado parcelamento em 6 vezes' },
+        { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
+        { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 3 vezes' },
+        { desconto: "Isenção de 1 parcela", descricao: 'Ofertado isenção de 1 parcela' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ]
     },
     4: {
-        1: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-        { desconto: "5% de Desconto", descricao: 'ofertado desconto de 5%' },
+        1: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        2: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-        { desconto: "20% de Desconto", descricao: 'ofertado desconto de 20%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelameno em 4 vezes' },
+        2: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+        { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-        { desconto: "25% de Desconto", descricao: 'ofertado desconto de 25%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-        { desconto: "Isenção de 2 parcelas", descricao: 'ofertado isenção de 2 parcelas' },
+        3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+        { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+        { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-        { desconto: "30% de Desconto", descricao: 'ofertado desconto de 30%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-        { desconto: "Isenção de 3 parcelas", descricao: 'ofertado isenção de 3 parcelas' },
+        4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+        { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+        { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ]
     },
     5: {
-      1: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'ofertado parcelamento em 5 vezes' },
-        { desconto: "5% de Desconto", descricao: 'ofertado desconto de 5%' },
+      1: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 5 vezes' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-        { desconto: "20% de Desconto", descricao: 'ofertado desconto de 20%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelameno em 4 vezes' },
+        2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+        { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-        { desconto: "25% de Desconto", descricao: 'ofertado desconto de 25%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-        { desconto: "Isenção de 2 parcelas", descricao: 'ofertado isenção de 2 parcelas' },
+        3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+        { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+        { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ],
-        4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-        { desconto: "30% de Desconto", descricao: 'ofertado desconto de 30%' },
-        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-        { desconto: "Isenção de 3 parcelas", descricao: 'ofertado isenção de 3 parcelas' },
+        4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+        { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
+        { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+        { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
         { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
         ]
     },
     6: {
-      1: [{ desconto: "Parcelamento na Nº de Parcelas em Aberto", descricao: 'ofertado parcelamento no número de parcelas em aberto' },
-      { desconto: "5% de Desconto", descricao: 'ofertado desconto de 5%' },
+      1: [{ desconto: "Parcelamento na Nº de Parcelas em Aberto", descricao: 'Ofertado parcelamento no número de parcelas em aberto' },
+      { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
       { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
       ],
-      2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'ofertado parcelamento em 4 vezes' },
-      { desconto: "20% de Desconto", descricao: 'ofertado desconto de 20%' },
-      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelameno em 4 vezes' },
+      2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
+      { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
+      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
       { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
       ],
-      3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-      { desconto: "25% de Desconto", descricao: 'ofertado desconto de 25%' },
-      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-      { desconto: "Isenção de 2 parcelas", descricao: 'ofertado isenção de 2 parcelas' },
+      3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+      { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
+      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+      { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
       { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
       ],
-      4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'ofertado parcelamento em 8 vezes' },
-      { desconto: "30% de Desconto", descricao: 'ofertado desconto de 30%' },
-      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'ofertado desconto de 5% mais parcelamento em 4 vezes' },
-      { desconto: "Isenção de 3 parcelas", descricao: 'ofertado isenção de 3 parcelas' },
+      4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
+      { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
+      { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
+      { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
       { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'não foi passado descontos para o cliente' },
+        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
       ]
     }
     // Adicione mais anos conforme necessário
