@@ -6,6 +6,7 @@
     align-items: center;
     height: 100vh;
     background-color: #f0f0f0;
+    overflow: auto; /* Adiciona a barra de rolagem quando necessário */
 }
 
 .block {
@@ -16,7 +17,10 @@
     text-align: center;
     width: 95%;
     max-width: 600px;
-    margin-top: -100px;
+    overflow: auto; /* Adiciona a barra de rolagem quando necessário */
+    margin-bottom: 20px;
+    margin-top: 20px;
+
 }
 
 h1 {
@@ -99,7 +103,7 @@ input[type="text"] {
 }
 .container-contrato {
     display: grid;
-    grid-template-columns: 8% 20% 5% 55%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 10% 20% 10% 20%; /* Define duas colunas de 30% cada */
     gap: 20px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -15px; /* Adiciona uma margem à esquerda */
@@ -110,9 +114,18 @@ input[type="text"] {
 #label-contrato, #input-contrato, #label-nome, #input-nome {
     width: 100%; /* Necessário para garantir que os elementos preencham suas colunas */
 }
+.container-nome {
+    display: grid;
+    grid-template-columns: 8% 90%; /* Define duas colunas de 30% cada */
+    gap: 20px; /* Espaçamento entre as colunas, opcional */
+    justify-content: start; /* Alinha as colunas à esquerda */
+    margin-left: -15px; /* Adiciona uma margem à esquerda */
+    margin-top: -10px;
+
+}
 .container-endereco {
     display: grid;
-    grid-template-columns: 8% 53% 5% 23%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 8% 90%; /* Define duas colunas de 30% cada */
     gap: 20px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -15px; /* Adiciona uma margem à esquerda */
@@ -141,6 +154,16 @@ input[type="text"] {
 .container-debito {
     display: grid;
     grid-template-columns: 28% 10% 25% 30%; /* Define duas colunas de 30% cada */
+    gap: 10px; /* Espaçamento entre as colunas, opcional */
+    justify-content: start; /* Alinha as colunas à esquerda */
+    margin-left: -5px; /* Adiciona uma margem à esquerda */
+    margin-top: -10px;
+
+
+}
+.container-bairro {
+    display: grid;
+    grid-template-columns: 10% 40% 10% 30%; /* Define duas colunas de 30% cada */
     gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -5px; /* Adiciona uma margem à esquerda */
@@ -185,3 +208,64 @@ input[type="text"] {
     font-size: 22px; /* Tamanho do ícone */
     color: #fff; /* Cor do ícone */
   }
+  #output-total-parcelas, #output-total-debito{
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .card {
+    background-color: #2196F3;
+    /* Um tom de azul claro */
+    border: 1px solid #007bff;  /* Azul mais escuro para o contorno */
+    border-radius: 8px;
+    padding: 16px;
+    margin: 4px;
+    cursor: pointer;
+    transition: box-shadow 0.3s;
+    width: calc(50% - 16px); /* Para tornar o card responsivo, definimos a largura como 50% da largura do contêiner pai, com 16px de margem em cada lado */
+    box-sizing: border-box; /* Para incluir a largura da borda no cálculo da largura total */
+    color: white;
+    font-weight: bold;
+}
+
+.card:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    background-color: #0056b3;
+
+}
+
+.card.selected {
+    background-color: #90caf9; /* Um tom de azul mais escuro para cartões selecionados */
+    border: 1px solid #e3f2fd;  /* Azul mais escuro para o contorno */
+
+}
+
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; /* Para espaçar uniformemente os cartões horizontalmente */
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+
+.input-container {
+    margin-bottom: 20px;
+    width: 100%; /* Certifica-se de que a entrada e os botões estejam na largura total */
+    display: flex;
+    justify-content: space-between; /* Para espaçar uniformemente os elementos de entrada e os botões */
+}
+
+.input-container input {
+    width: calc(50% - 8px); /* Divide a largura da entrada ao meio com 8px de margem */
+    box-sizing: border-box;
+}
+
+.input-container button {
+    width: calc(50% - 8px); /* Divide a largura do botão ao meio com 8px de margem */
+    box-sizing: border-box;
+}
+@media (min-width: 768px) { /* Quando a largura da tela for maior ou igual a 768px (tamanho de tela médio) */
+    .card {
+        width: calc(25% - 4px); /* Para telas maiores, os cartões ocupam 25% da largura do contêiner pai, com 16px de margem em cada lado */
+    }
+}

@@ -74,38 +74,43 @@
                   <input type="text" id="contractNumber" placeholder="Digite o número do contrato">
                   <button id="searchButton">Buscar</button>
                 </div>
-                  <div id="result"></div>
-                  <!-- Os resultados da busca serão adicionados aqui -->
                   <div class="container-dados-cliente">
                 <div class="container-contrato">
                   <h4>Contrato:</h4>
                   <div class="rounded-div">
                      <span id = "output-contrato"></span>
                  </div>
+                 <h4>Cliente:</h4>
+                  <div class="rounded-div">
+                     <span id = "output-cliente"></span>
+                 </div>
+               
+                </div>
+                <div class="container-nome">
+              
                  <h4>Nome:</h4>
                   <div class="rounded-div">
                      <span id = "output-nome"></span>
                  </div>
-                <!--<label id = "label-contrato">Contrato:</label>
-                <input id = "input-contrato" name = "input-contrato" />
-                <label id = "label-nome">Nome:</label>
-                <input id = "input-nome"/> !-->
+               
                 </div>
                 <div class="container-endereco">
                   <h4>Endereço:</h4>
                   <div class="rounded-div">
                      <span id = "output-endereco"></span>
                  </div>
-                 <h4>Bairro:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-bairro"></span>
-                 </div> <!--
-                  <label id = "label-endereco">Endereço:</label>
-                  <input id = "input-endereco"/>
-                  <label id = "label-bairro">Bairro:</label>
-                  <input id = "input-bairro"/> <!-->
                  
                 </div>
+                <div class="container-bairro">
+                  <h4>Bairro:</h4>
+                  <div class="rounded-div">
+                     <span id = "output-bairro"></span>
+                 </div>
+                 <h4>Telefone:</h4>
+                  <div class="rounded-div">
+                     <span id = "output-telefone"></span>
+                 </div> 
+                 </div>
                 <div class="container-forma-de-pagamento">
                   <h4>F.Pagamento:</h4>
                   <div class="rounded-div">
@@ -116,11 +121,6 @@
                      <span id = "output-data-ativacao"></span>
                  </div> 
                  
-                 <!--
-                  <label id = "label-forma-de-pagamento">F. de Pagamento:</label>
-                  <input id = "input-forma-de-pagamento"/>
-                  <label id = "label-data-ativacao">D. de Ativação:</label>
-                  <input id = "input-data-ativacao"/><!-->
                 </div>
                 <div class="container-debito">
                   <h4>Qt.Parcelas:</h4>
@@ -131,15 +131,12 @@
                   <div class="rounded-div">
                      <span id = "output-total-debito"></span>
                  </div> 
-                    <!--
-                  <label id = "label-total-parcelas">Quant. Parcelas:</label>
-                  <input id = "input-total-parcelas"/>
-                  <label id = "label-total-debito">Débito:</label>
-                  <input id = "input-total-debito"/><!-->
+                 
 
                 </div>
                <br>
             </div>
+            <div id="cards-container" class="cards-container"></div>
                 <button id="writeButton" onclick="enviarDados()">Gravar na Planilha</button>
 
                 </div>
