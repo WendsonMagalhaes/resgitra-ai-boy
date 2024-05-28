@@ -17,7 +17,7 @@
     width: 95%;
     max-width: 600px;
     overflow: auto; /* Adiciona a barra de rolagem quando necessário */
-    margin: 80px auto; /* Centraliza o bloco horizontalmente */
+    margin: 120px auto; /* Centraliza o bloco horizontalmente */
 
 }
 
