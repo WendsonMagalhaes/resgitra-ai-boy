@@ -26,7 +26,7 @@
   <script src="https://apis.google.com/js/api.js"></script>
 
   <!-- Your app title -->
-  <title>Resgitra aí Boy - Home</title>
+  <title>Resgitra aí Boy - Registrados</title>
   <!-- Path to Framework7 Library Bundle CSS -->
   <link rel="stylesheet" href="lib/framework7-bundle.min.css">
   <!-- CSS PERSONALIZADO PARA MENU-->
@@ -59,115 +59,58 @@
                   </div>
                 </div>
                 <div class="navbar-inner justify-content-center">
-                    <div class="title ">Buscar Contrato</div>
+                    <div class="title ">Registrados</div>
                    
                 </div>
                 
             </div>
+            
 
             <!-- Scrollable page content -->
             <div class="page-content">
-                <div class="block">
-           
+                <div class = "block">
+                    <h2 class = "h2-registrados" id = "h2-registrados-buscar">Buscar Contrato</h2>
+                <div class="container-buscar-contrato">
+                    <input type="text" id="contractNumberRegistrados" placeholder="Digite o número do contrato">
+                    <button id="searchButton">Buscar</button>
+                  </div>
+                </div>
+                <div class="block" id = "block-registrados">
+                    <h2 class = "h2-registrados" id = "h2-registrados-registrados">Contratos Registrados</h2>
+                    <input type="date" id="dataInput" name="dataInput">
 
-                  <div class="container-buscar-contrato">
-                  <input type="text" id="contractNumber" placeholder="Digite o número do contrato">
-                  <button id="searchButton">Buscar</button>
-                </div>
-                  <div class="container-dados-cliente">
-                <div class="container-contrato">
-                  <h4>Contrato:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-contrato"></span>
-                 </div>
-                 <h4>Cliente:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-cliente"></span>
-                 </div>
-               
-                </div>
-                <div class="container-nome">
-              
-                 <h4>Nome:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-nome"></span>
-                 </div>
-               
-                </div>
-                <div class="container-endereco">
-                  <h4>Endereço:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-endereco"></span>
-                 </div>
-                 
-                </div>
-                <div class="container-bairro">
-                  <h4>Bairro:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-bairro"></span>
-                 </div>
-                 <h4>Telefone:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-telefone"></span>
-                 </div> 
-                 </div>
-                <div class="container-forma-de-pagamento">
-                  <h4>F.Pagamento:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-forma-de-pagamento"></span>
-                 </div> 
-                 <h4>Dt.Ativação:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-data-ativacao"></span>
-                 </div> 
-                 
-                </div>
-                <div class="container-debito">
-                  <h4>Qt.Parcelas:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-total-parcelas"></span>
-                 </div> 
-                 <h4>Débito:</h4>
-                  <div class="rounded-div">
-                     <span id = "output-total-debito"></span>
-                 </div> 
-                 
+                    <div id="result-registrados" class="result-container"></div>
 
-                </div>
-               <br>
-               
-            </div>
             <!-- Elemento de carregamento -->
             <div id="loading-spinner" class="loading-spinner"></div>
 
             <div id="custom-message" class="custom-message">
-              <span class="message-text">Registro Salva com Sucesso!</span>
+              <span class="message-text">Negociação Salva com Sucesso!</span>
                <!-- <button id="close-button" class="close-button">Fechar</button> !-->
           </div>
           <div id="custom-message-contrato-nao-localizado" class="custom-message">
             <span class="message-text">Contrato não Localizado!</span>
              <!-- <button id="close-button" class="close-button">Fechar</button> !-->
         </div>
-            <div id="cards-container" class="cards-container"></div>
-                <button id="writeButton" onclick="enviarDados()">Gravar na Planilha</button>
 
-                </div>
-
-            </div>
+        </div>
+                    <!-- Popup structure -->
+        <div id="popup-dados-registro" >
+        <div class="popup-close" onclick="closePopup()">x</div>
+        <div id="popup-content" class="popup-content"></div>
         </div>
         <div class="toolbar toolbar-bottom">
           <div class="toolbar-inner display-flex">
-              <a href="/home" class="tab-link link active">
+              <a href="/home" class="tab-link link" onclick="redirectToPages('home')">
                   <i class="mdi mdi-border-color"></i>
                   <span>Registrar</span>
               </a>
             
-              <a href="" class="tab-link link" onclick="redirectToPages('registrados')">
+              <a href="/registrados" class="tab-link link active" >
                 <i class="mdi mdi-checkbox-multiple-marked"></i>
                 <span>Registrados</span>
               </a>
               
-          </div>
           </div>
     </div>
 
@@ -175,8 +118,7 @@
   </div>
   
 
-</div>
-
+   
   <!-- Path to Framework7 Library Bundle JS-->
 <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
 <!-- jQuery -->
@@ -184,6 +126,42 @@
 <!-- Roteamento do app-->
 <script type="text/javascript" src="js/routes.js"></script>
 <script type="text/javascript" src="js/home.js"></script>
+<script>
+
+function initialize() {
+    const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
+    const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
+    const dataInput = document.getElementById('dataInput');
+    atualizarDataInput();
+    // Definir data atual no input de data
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+    const yyyy = today.getFullYear();
+    const dataFormatada = `${dd}/${mm}/${yyyy}`;
+  
+    dataInput.addEventListener('input', function() {
+        const [year, month, day] = this.value.split('-');
+        const dataFormatada =`${day}/${month}/${year}`;
+        searchValueMotoBoy(spreadsheetId, range, dataFormatada, (result) => {
+            console.log('Registros encontrados:', result);
+            const resultContainer = document.getElementById('result-registrados');
+            displayResultsMotoboy(resultContainer, result);
+        });
+    });
+  
+    // Chamar a função para buscar e exibir os resultados iniciais
+    searchValueMotoBoy(spreadsheetId, range, dataFormatada, (result) => {
+        console.log('Registros encontrados:', result);
+        const resultContainer = document.getElementById('result-registrados');
+        displayResultsMotoboy(resultContainer, result);
+    });
+  }
+document.addEventListener('DOMContentLoaded', initialize);
+
+</script>
   
 </body>
 </html>
+
+   

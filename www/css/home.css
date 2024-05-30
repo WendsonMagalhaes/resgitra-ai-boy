@@ -20,7 +20,22 @@
     margin: 120px auto; /* Centraliza o bloco horizontalmente */
 
 }
+#block-registrados {
+  
+    margin-top: -100px;
+}
+/*.h2-registrados {
+    margin-right: 60%;
+}
+*/
+#h2-registrados-buscar{
+    margin-right: 60%;
 
+}
+#h2-registrados-registrados{
+    margin-right: 50%;
+
+}
 h1 {
     margin-bottom: 20px;
     color: #333;
@@ -67,7 +82,7 @@ input[type="text"] {
     margin-top: 5px;
     margin-bottom: 20px;
     border: 2px solid #2196F3;
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 16px;
 }
 .navbar-bg{
@@ -95,7 +110,7 @@ input[type="text"] {
 
 }
 
-#contractNumber, #searchButton {
+#contractNumber, #searchButton, #contractNumberRegistrados {
     width: 100%; /* Necessário para garantir que os elementos preencham suas colunas */
 }
 #searchButton {
@@ -182,7 +197,7 @@ input[type="text"] {
     height: 2px;
     background-color: #f0f0f0;
     border: 2px solid #2196F3;
-    border-radius: 15px; /* Aqui você define o arredondamento das bordas */
+    border-radius: 10px; /* Aqui você define o arredondamento das bordas */
     padding: 15px;
     text-align: center;
     margin-left: -50px;
@@ -228,6 +243,9 @@ input[type="text"] {
     box-sizing: border-box; /* Para incluir a largura da borda no cálculo da largura total */
     color: white;
     font-weight: bold;
+}
+.username::first-letter {
+    text-transform: uppercase;
 }
 
 .card:hover {
@@ -325,4 +343,77 @@ input[type="text"] {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
-  
+
+.result-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 20px;
+}
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    border: 2px solid #2196F3;
+    border-radius: 10px;
+    padding: 5px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    cursor: pointer; /* Altera o cursor para indicar que o elemento é clicável */
+
+}
+.result-row:hover{
+    background-color: #f0f0f0;
+}
+.result-item {
+    flex: 1;
+}
+.result-item-name {
+    flex: 2;
+}
+.result-item span {
+    font-weight: bold;
+}
+
+#popup-dados-registro {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 2px solid #2196F3;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 1000;
+    width: 90%;
+}
+.popup-content {
+    margin-bottom: 10px;
+}
+.popup-close {
+    margin-left: 95%;
+    display: block;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    background-color: #2196F3;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%; /* para criar um círculo */
+}
+
+.popup-close:hover {
+    background-color: #1565c0; /* cor do círculo ao passar o mouse */
+}
+ /* Estilo para o input de data */
+ #dataInput {
+    margin-top: 20px;
+    margin-bottom: 30px; /* Espaçamento abaixo */
+    margin-left: 70%;
+    border: 2px solid #2196F3;
+    padding: 10px;
+    border-radius: 10px;
+
+}

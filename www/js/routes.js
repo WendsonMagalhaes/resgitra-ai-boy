@@ -79,7 +79,7 @@ var app = new Framework7({
 });
 
 //Para testes direto no navegador
-//var mainView = app.views.create('.view-main', { url: '/index/' });
+var mainView = app.views.create('.view-main', { url: '/index/' });
 
 //EVENTO PARA SABER O ITEM DO MENU ATUAL
 app.on('routeChange', function (route) {

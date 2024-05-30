@@ -56,7 +56,12 @@ function searchValue(spreadsheetId, range, targetValue, callback) {
           } else {
             // Valor não encontrado
             console.log(`Contrato '${targetValue}' não encontrado.`);
-            alert(`Contrato'${targetValue}' não encontrado.`);
+            hideLoadingSpinner()
+            showCustomMessage("custom-message-contrato-nao-localizado")
+          // Aguarda 3 segundos antes de recarregar a página
+          setTimeout(function() {
+            hideCustomMessage("custom-message-contrato-nao-localizado")
+          }, 1500); // 3000 milissegundos = 3 segundos
 
           }
         } else {
@@ -102,6 +107,17 @@ function searchValue(spreadsheetId, range, targetValue, callback) {
       return;
     }
   }
+  function redirectToPages(namePage) {
+    if(namePage == "home"){
+      window.location.href = "home";
+
+    }else{
+      window.location.href = "registrados";
+
+    }
+
+}
+
 function displayResult(row) {
     document.getElementById('output-contrato').textContent = row[0];
     document.getElementById('output-cliente').textContent = row[12];
@@ -141,7 +157,83 @@ function displayResult(row) {
     hideLoadingSpinner();
  
 }
+function displayResultsMotoboy(container, data) {
+  container.innerHTML = ''; // Clear previous results
+  data.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'result-row';
 
+      const contractDiv = document.createElement('div');
+      contractDiv.className = 'result-item';
+      contractDiv.innerHTML = `<span>Contrato:</span> ${item[0]}`;
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'result-item result-item-name';
+      nameDiv.innerHTML = `<span>Nome:</span> ${item[2]}`;
+
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'result-item';
+      dateDiv.innerHTML = `<span>Data de Ativação:</span> ${item[7]}`;
+
+      row.appendChild(contractDiv);
+      row.appendChild(nameDiv);
+      row.appendChild(dateDiv);
+
+      // Adicionar evento de clique a cada linha
+      row.addEventListener('click', () => showPopup(item));
+
+      container.appendChild(row);
+  });
+}
+function showPopup(data) {
+  const popup = document.getElementById('popup-dados-registro');
+  const popupContent = document.getElementById('popup-content');
+
+  popupContent.innerHTML = `
+      <div><strong>Contrato:</strong> ${data[0]}</div>
+      <div><strong>Nome:</strong> ${data[2]}</div>
+      <div><strong>Endereço:</strong> ${data[3]}</div>
+      <div><strong>Bairro:</strong> ${data[4]}</div>
+      <div><strong>Telefone:</strong> ${data[5]}</div>
+      <div><strong>Identificação:</strong> ${data[6]}</div>
+      <div><strong>Data de Ativação:</strong> ${data[7]}</div>
+      <div><strong>Parcelas em Atraso:</strong> ${data[8]}</div>
+      <div><strong>Débito:</strong> ${data[9]}</div>
+      <div><strong>Motoboy:</strong> ${data[10]}</div>
+      <div><strong>Observações:</strong> ${data[11]}</div>
+  `;
+
+  popup.style.display = 'block';
+  console.log(data);
+}
+
+function closePopup() {
+  const popup = document.getElementById('popup-dados-registro');
+  popup.style.display = 'none';
+}
+function getCurrentDate() {
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+  const yyyy = today.getFullYear();
+
+  return `${dd}/${mm}/${yyyy}`;
+}
+// Função para atualizar o input de data
+function atualizarDataInput() {
+  // Obter o elemento de input de data
+  const dataInput = document.getElementById('dataInput');
+  // Criar um objeto de data para a data atual
+  const dataAtual = new Date();
+  // Formatar a data atual no formato YYYY-MM-DD
+  const ano = dataAtual.getFullYear();
+  const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // Adiciona um zero à esquerda se for necessário
+  const dia = String(dataAtual.getDate()).padStart(2, '0'); // Adiciona um zero à esquerda se for necessário
+  const dataFormatada = `${ano}-${mes}-${dia}`;
+
+  // Definir o valor do input de data como a data formatada
+  dataInput.value = dataFormatada;
+}
 function calcularAno(data_ativacao) {
     var partes = data_ativacao.split('/');
     var dia = parseInt(partes[0], 10);
@@ -175,6 +267,7 @@ async function enviarDados() {
     var dados = {
         values:
             [
+              getCurrentDate(),
               document.getElementById('output-contrato').textContent.trim(),
               document.getElementById('output-cliente').textContent.trim(),
               document.getElementById('output-nome').textContent.trim(),
@@ -210,7 +303,7 @@ async function enviarDados() {
         console.log('Nova linha adicionada:', data);
         // Exibe a mensagem personalizada
         hideLoadingSpinner()
-        showCustomMessage();
+        showCustomMessage("custom-message");
 
         // Aguarda 3 segundos antes de recarregar a página
         setTimeout(function() {
@@ -237,9 +330,13 @@ function hideLoadingSpinner() {
   document.getElementById('loading-spinner').style.display = 'none';
 }
 // Exibe a caixa de mensagem personalizada
-function showCustomMessage() {
-  document.getElementById('custom-message').style.display = 'block';
+function showCustomMessage(id) {
+  document.getElementById(id).style.display = 'block';
 }
+function hideCustomMessage(id) {
+  document.getElementById(id).style.display = 'none';
+}
+
 
 /** Fecha a caixa de mensagem personalizada
 document.getElementById('close-button').addEventListener('click', function() {
@@ -388,3 +485,126 @@ const propostasDescontos = {
     }
     // Adicione mais anos conforme necessário
 };
+
+function searchValueMotoBoy(spreadsheetId, range, date, callback) {
+  const login= document.getElementById('output-username').textContent.trim();
+  const motoboy =   login.charAt(0).toUpperCase() + login.slice(1).toLowerCase(); 
+
+  gapi.load('client', () => {
+    gapi.client.init({
+      apiKey: API_KEY,
+      discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+    }).then(() => {
+      return gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: spreadsheetId,
+        range: range,
+      });
+    }).then((response) => {
+      const result = response.result;
+      const values = result.values;
+
+      if (values && values.length > 0) {
+        let targetRows = values.filter(row => row[10] === motoboy); // Filtra pelo motoboy
+
+        if (date) {
+          // Filtra pela data, se fornecida
+          targetRows = targetRows.filter(row => row[7] === date);
+        }
+
+        if (targetRows.length > 0) {
+          // Registros encontrados, chama o callback com os valores
+          if (callback) callback(targetRows);
+        } else {
+          // Nenhum registro encontrado
+          console.log(`Nenhum registro para o motoboy '${motoboy}' e data '${date}' foi encontrado.`);
+          hideLoadingSpinner()
+          showCustomMessage("custom-message-contrato-nao-localizado")
+        // Aguarda 3 segundos antes de recarregar a página
+        setTimeout(function() {
+          hideCustomMessage("custom-message-contrato-nao-localizado")
+        }, 1500); // 3000 milissegundos = 3 segundos
+
+        }
+      } else {
+        // Nenhuma linha na planilha
+        console.log('Nenhuma linha na planilha.');
+        alert('Nenhuma linha na planilha.');
+      }
+    }).catch((err) => {
+      console.error('Erro: ', err.result.error.message);
+      alert('Erro: ', err.result.error.message);
+    });
+  });
+}
+document.getElementById('searchButton').addEventListener('click', () => {
+  const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
+  const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
+  const contractNumber = (document.getElementById('contractNumberRegistrados').value).padStart(6, '0');
+
+
+  if (!contractNumber) {
+    alert('Por favor, insira o número do contrato.');
+    return;
+  }
+  showLoadingSpinner();
+  searchValueMotoBoyContrato(spreadsheetId, range, contractNumber, (result) => {
+    console.log('Registros encontrados:', result);
+    const resultContainer = document.getElementById('result-registrados');
+    displayResultsMotoboy(resultContainer, result);
+    hideLoadingSpinner()
+
+});
+
+
+});
+function searchValueMotoBoyContrato(spreadsheetId, range, contrato, callback) {
+  const login= document.getElementById('output-username').textContent.trim();
+  const motoboy =   login.charAt(0).toUpperCase() + login.slice(1).toLowerCase(); 
+
+  gapi.load('client', () => {
+    gapi.client.init({
+      apiKey: API_KEY,
+      discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+    }).then(() => {
+      return gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: spreadsheetId,
+        range: range,
+      });
+    }).then((response) => {
+      const result = response.result;
+      const values = result.values;
+
+      if (values && values.length > 0) {
+        let targetRows = values.filter(row => row[10] === motoboy); // Filtra pelo motoboy
+
+        if (contrato) {
+          // Filtra pela data, se fornecida
+          targetRows = targetRows.filter(row => row[0] === contrato);
+        }
+
+        if (targetRows.length > 0) {
+          // Registros encontrados, chama o callback com os valores
+          if (callback) callback(targetRows);
+        } else {
+          // Nenhum registro encontrado
+          console.log(`Nenhum registro para o motoboy '${motoboy}' e data '${contrato}' foi encontrado.`);
+          hideLoadingSpinner()
+          showCustomMessage("custom-message-contrato-nao-localizado")
+        // Aguarda 3 segundos antes de recarregar a página
+        setTimeout(function() {
+          hideCustomMessage("custom-message-contrato-nao-localizado")
+        }, 1500); // 3000 milissegundos = 3 segundos
+        }
+      } else {
+        // Nenhuma linha na planilha
+        console.log('Nenhuma linha na planilha.');
+        alert('Nenhuma linha na planilha.');
+      }
+    }).catch((err) => {
+      console.error('Erro: ', err.result.error.message);
+      alert('Erro: ', err.result.error.message);
+    });
+  });
+}
+
+
