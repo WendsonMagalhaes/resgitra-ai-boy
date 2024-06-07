@@ -16,6 +16,8 @@ var loginDurval = "durval";
 var passwordDurval = "2222";
 var loginOscar = "oscar";
 var passwordOscar = "3333";
+var loginWendson = "wendson";
+var passwordWendson = "4444";
 var usuario;
 
 app.use(session({ secret: '09r78cn82b3r89x1@38xy4184' }));
@@ -57,7 +59,12 @@ app.post('/', (req, res) => {
         req.session.login = loginOscar;
         usuario = loginOscar.charAt(0).toUpperCase() + loginOscar.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
-    } else {
+    } else if (req.body.password == passwordWendson && req.body.login.toLowerCase() == loginWendson) {
+        req.session.login = loginWendson;
+        usuario = loginWendson.charAt(0).toUpperCase() + loginWendson.slice(1).toLowerCase(); 
+        res.render('controle-registros', { login: usuario });
+    }
+     else {
         errorMessage = "Login ou senha incorretos. Por favor, tente novamente."; // Define a mensagem de erro
         res.render('index', { errorMessage: errorMessage }); // Passa a mensagem de erro para o modelo
     }
@@ -74,11 +81,13 @@ app.get('/', (req, res) => {
 app.get('/', (req, res) => {
     if (req.session.login) {
         res.render('home', { login: usuario });
+
     } else {
         res.render('index');
     }
 
 });
+
 app.get('/registrados', (req, res) => {
     if (req.session.login) {
         res.render('registrados', { login: usuario });

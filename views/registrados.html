@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <!-- Required meta tags-->
     <meta charset="utf-8">
@@ -18,6 +18,8 @@
     <!-- Your app title -->
     <!-- Path to Framework7 Library Bundle CSS -->
     <link rel="stylesheet" href="lib/framework7-bundle.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
    
 
         <!-- CSS PERSONALIZADO PARA MENU-->
@@ -78,8 +80,8 @@
                 <div class = "block">
                     <h2 class = "h2-registrados" id = "h2-registrados-buscar">Buscar Contrato</h2>
                 <div class="container-buscar-contrato">
-                    <input type="text" id="contractNumberRegistrados" placeholder="Digite o número do contrato">
-                    <button id="searchButton">Buscar</button>
+                    <input type="text" id="contractNumberRegistrados" placeholder="XXXXXX">
+                    <button id="searchButtonRegistrado">Buscar</button>
                   </div>
                 </div>
                 <div class="block" id = "block-registrados">
@@ -125,7 +127,8 @@
   </div>
   
 
-   
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Path to Framework7 Library Bundle JS-->
 <script type="text/javascript" src="lib/framework7-bundle.min.js"></script>
 <!-- jQuery -->
@@ -137,9 +140,9 @@
 
 function initialize() {
     const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
-    const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
+    const range = 'A1:N'; // Substitua pelo intervalo de células onde deseja pesquisar
     const dataInput = document.getElementById('dataInput');
-    atualizarDataInput();
+    atualizarDataInput('dataInput');
     // Definir data atual no input de data
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');

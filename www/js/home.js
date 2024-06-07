@@ -2,6 +2,7 @@ const SPREADSHEET_ID = '1vn_5JYkVxWK6i3UnhuvVpg11Eb7sdbCVWRVW5ha-hCg';
 const RANGE = 'Inadimplencia!A:n';
 const API_KEY = 'AIzaSyB_rfYHUzFP0hF5dmQPUVxK88BoVF74HJo'; // Substitua 'YOUR_API_KEY' pela sua chave da API
 
+document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('searchButton').addEventListener('click', () => {
   const contractNumber = (document.getElementById('contractNumber').value).padStart(6, '0');
   console.log(contractNumber);
@@ -13,6 +14,7 @@ document.getElementById('searchButton').addEventListener('click', () => {
   showLoadingSpinner();
   searchValue(SPREADSHEET_ID, RANGE, contractNumber, displayResult);
   
+})
 });
 
 function searchValue(spreadsheetId, range, targetValue, callback) {
@@ -57,10 +59,22 @@ function searchValue(spreadsheetId, range, targetValue, callback) {
             // Valor não encontrado
             console.log(`Contrato '${targetValue}' não encontrado.`);
             hideLoadingSpinner()
-            showCustomMessage("custom-message-contrato-nao-localizado")
+            Swal.fire({
+              title: `Contrato '${targetValue}' não encontrado.`,
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonColor: '#073261', // Cor do botão de confirmação
+              confirmButtonText: 'Ok',
+              confirmButtonTextColor: "#fff",
+              customClass: {
+                  title: 'sweetalert-font', // Classe CSS para o título
+                  htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+                  confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+                  container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+              }
+          });
           // Aguarda 3 segundos antes de recarregar a página
           setTimeout(function() {
-            hideCustomMessage("custom-message-contrato-nao-localizado")
           }, 1500); // 3000 milissegundos = 3 segundos
 
           }
@@ -165,15 +179,15 @@ function displayResultsMotoboy(container, data) {
 
       const contractDiv = document.createElement('div');
       contractDiv.className = 'result-item';
-      contractDiv.innerHTML = `<span>Contrato:</span> ${item[0]}`;
+      contractDiv.innerHTML = `<span>Contrato:</span> ${item[1]}`;
 
       const nameDiv = document.createElement('div');
       nameDiv.className = 'result-item result-item-name';
-      nameDiv.innerHTML = `<span>Nome:</span> ${item[2]}`;
+      nameDiv.innerHTML = `<span>Nome:</span> ${item[3]}`;
 
       const dateDiv = document.createElement('div');
       dateDiv.className = 'result-item';
-      dateDiv.innerHTML = `<span>Data de Ativação:</span> ${item[7]}`;
+      dateDiv.innerHTML = `<span>Data do Registro:</span> ${item[0]}`;
 
       row.appendChild(contractDiv);
       row.appendChild(nameDiv);
@@ -190,17 +204,16 @@ function showPopup(data) {
   const popupContent = document.getElementById('popup-content');
 
   popupContent.innerHTML = `
-      <div><strong>Contrato:</strong> ${data[0]}</div>
-      <div><strong>Nome:</strong> ${data[2]}</div>
-      <div><strong>Endereço:</strong> ${data[3]}</div>
-      <div><strong>Bairro:</strong> ${data[4]}</div>
-      <div><strong>Telefone:</strong> ${data[5]}</div>
-      <div><strong>Identificação:</strong> ${data[6]}</div>
-      <div><strong>Data de Ativação:</strong> ${data[7]}</div>
-      <div><strong>Parcelas em Atraso:</strong> ${data[8]}</div>
-      <div><strong>Débito:</strong> ${data[9]}</div>
-      <div><strong>Motoboy:</strong> ${data[10]}</div>
-      <div><strong>Observações:</strong> ${data[11]}</div>
+      <div><strong>Contrato:</strong> ${data[1]}</div>
+      <div><strong>Nome:</strong> ${data[3]}</div>
+      <div><strong>Endereço:</strong> ${data[4]}</div>
+      <div><strong>Bairro:</strong> ${data[5]}</div>
+      <div><strong>Telefone:</strong> ${data[6]}</div>
+      <div><strong>Data de Ativação:</strong> ${data[8]}</div>
+      <div><strong>Parcelas em Atraso:</strong> ${data[9]}</div>
+      <div><strong>Total do Débito:</strong> ${data[10]}</div>
+      <div><strong>Motoboy:</strong> ${data[11]}</div>
+      <div><strong>Observações: <br></strong> ${data[12].replace(/\n/g, '<br>')}</div>
   `;
 
   popup.style.display = 'block';
@@ -220,9 +233,9 @@ function getCurrentDate() {
   return `${dd}/${mm}/${yyyy}`;
 }
 // Função para atualizar o input de data
-function atualizarDataInput() {
+function atualizarDataInput(id) {
   // Obter o elemento de input de data
-  const dataInput = document.getElementById('dataInput');
+  const dataInput = document.getElementById(id);
   // Criar um objeto de data para a data atual
   const dataAtual = new Date();
   // Formatar a data atual no formato YYYY-MM-DD
@@ -259,7 +272,7 @@ async function enviarDados() {
   let selectedDescriptions = '';
   let i = 1;
   selectedCards.forEach(card => {
-      selectedDescriptions += `Proposta ${i}: `+ card.dataset.descricao + '\n';
+      selectedDescriptions += ` ${i}. Proposta: `+ card.dataset.descricao + '\n';
       i++;
   });
   console.log(selectedDescriptions);
@@ -279,10 +292,9 @@ async function enviarDados() {
               document.getElementById('output-total-parcelas').textContent.trim(),
               document.getElementById('output-total-debito').textContent.trim(),
               document.getElementById('output-username').textContent.trim(),
-            "Cobrança feita pelo Motoboy " + document.getElementById('output-username').textContent.trim() +
-             '\n' +  "Cliente ficou de ir em Loja ou retornar para a Central"+ '\n' +"Negociação feita:" + '\n' + selectedDescriptions
-             + '\n' + '\n' + "OBS: Considerar apenas uma proposta de negociação"  + '\n' +  "Wendson"
-
+            "Cobrança realizada pelo Motoboy " + document.getElementById('output-username').textContent.trim() +
+             '\n' +  "Status do Cliente: Comprometeu-se a ir à loja ou entrar em contato com a Central."+ '\n' +"Negociação:" + '\n' + selectedDescriptions
+             + '\n' + "Observação:  Considerar apenas uma proposta de negociação."  + '\n' + '\n' +  document.getElementById('output-username').textContent.trim() +" - " + getCurrentDate()
             ]
     };
     try {
@@ -303,7 +315,20 @@ async function enviarDados() {
         console.log('Nova linha adicionada:', data);
         // Exibe a mensagem personalizada
         hideLoadingSpinner()
-        showCustomMessage("custom-message");
+        Swal.fire({
+          title: `Negociação Salva com Sucesso`,
+          icon: 'sucess',
+          showCancelButton: false,
+          confirmButtonColor: '#073261', // Cor do botão de confirmação
+          confirmButtonText: 'Ok',
+          confirmButtonTextColor: "#fff",
+          customClass: {
+              title: 'sweetalert-font', // Classe CSS para o título
+              htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+              confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+              container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+          }
+      });
 
         // Aguarda 3 segundos antes de recarregar a página
         setTimeout(function() {
@@ -354,133 +379,133 @@ const propostasDescontos = {
     2: {
         1: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'Ofertado parcelamento em 2 vezes' },
         { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         2: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'Ofertado parcelamento em 2 vezes' },
         { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         3: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
         { desconto: "15% de Desconto", descricao: 'Ofertado desconto de 15%' },
         { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 2 vezes' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         4: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
         { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
         { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 2 vezes' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ]
     },
     3: {
         1: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'Ofertado parcelamento em 3 vezes' },
         { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         2: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'Ofertado parcelamento em 3 vezes' },
         { desconto: "15% de Desconto", descricao: 'Ofertado desconto de 15%' },
         { desconto: "5% de Desconto com Parcelamento em 2 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 2 vezes' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         3: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'Ofertado parcelamento em 6 vezes' },
         { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
         { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 3 vezes' },
         { desconto: "Isenção de 1 parcela", descricao: 'Ofertado isenção de 1 parcela' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         4: [{ desconto: "Parcelamento em 6 Vezes", descricao: 'Ofertado parcelamento em 6 vezes' },
         { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
         { desconto: "5% de Desconto com Parcelamento em 3 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 3 vezes' },
         { desconto: "Isenção de 1 parcela", descricao: 'Ofertado isenção de 1 parcela' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ]
     },
     4: {
         1: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
         { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         2: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
         { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
         { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
         { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
         { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
         { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ]
     },
     5: {
       1: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 5 vezes' },
         { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
         { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
         { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
         { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ],
         4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
         { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
         { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
         { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
-        { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+        { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
         ]
     },
     6: {
       1: [{ desconto: "Parcelamento na Nº de Parcelas em Aberto", descricao: 'Ofertado parcelamento no número de parcelas em aberto' },
       { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
-      { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+      { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+      { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
       ],
       2: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
       { desconto: "20% de Desconto", descricao: 'Ofertado desconto de 20%' },
       { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelameno em 4 vezes' },
-      { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+      { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+      { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
       ],
       3: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
       { desconto: "25% de Desconto", descricao: 'Ofertado desconto de 25%' },
       { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
       { desconto: "Isenção de 2 parcelas", descricao: 'Ofertado isenção de 2 parcelas' },
-      { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+      { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+      { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
       ],
       4: [{ desconto: "Parcelamento em 8 Vezes", descricao: 'Ofertado parcelamento em 8 vezes' },
       { desconto: "30% de Desconto", descricao: 'Ofertado desconto de 30%' },
       { desconto: "5% de Desconto com Parcelamento em 4 Vezes", descricao: 'Ofertado desconto de 5% mais parcelamento em 4 vezes' },
       { desconto: "Isenção de 3 parcelas", descricao: 'Ofertado isenção de 3 parcelas' },
-      { desconto: "Sem Desconto", descricao: 'Sem desconto' },
-        { desconto: "Desconto não Ofertado", descricao: 'Não foi passado descontos para o cliente' },
+      { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+      { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuad, porém não foi feita nenhuma negociação' },
       ]
     }
     // Adicione mais anos conforme necessário
@@ -504,11 +529,11 @@ function searchValueMotoBoy(spreadsheetId, range, date, callback) {
       const values = result.values;
 
       if (values && values.length > 0) {
-        let targetRows = values.filter(row => row[10] === motoboy); // Filtra pelo motoboy
+        let targetRows = values.filter(row => row[11] === motoboy); // Filtra pelo motoboy
 
         if (date) {
           // Filtra pela data, se fornecida
-          targetRows = targetRows.filter(row => row[7] === date);
+          targetRows = targetRows.filter(row => row[0] === date);
         }
 
         if (targetRows.length > 0) {
@@ -516,12 +541,24 @@ function searchValueMotoBoy(spreadsheetId, range, date, callback) {
           if (callback) callback(targetRows);
         } else {
           // Nenhum registro encontrado
-          console.log(`Nenhum registro para o motoboy '${motoboy}' e data '${date}' foi encontrado.`);
+          console.log(`Nenhum registro realizado na data '${date}' `);
           hideLoadingSpinner()
-          showCustomMessage("custom-message-contrato-nao-localizado")
+          Swal.fire({
+            title: `Nenhum registro realizado na data '${date}'`,
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#073261', // Cor do botão de confirmação
+            confirmButtonText: 'Ok',
+            confirmButtonTextColor: "#fff",
+            customClass: {
+                title: 'sweetalert-font', // Classe CSS para o título
+                htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+                confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+                container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+            }
+        });
         // Aguarda 3 segundos antes de recarregar a página
         setTimeout(function() {
-          hideCustomMessage("custom-message-contrato-nao-localizado")
         }, 1500); // 3000 milissegundos = 3 segundos
 
         }
@@ -536,27 +573,43 @@ function searchValueMotoBoy(spreadsheetId, range, date, callback) {
     });
   });
 }
-document.getElementById('searchButton').addEventListener('click', () => {
-  const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
-  const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
-  const contractNumber = (document.getElementById('contractNumberRegistrados').value).padStart(6, '0');
+document.addEventListener('DOMContentLoaded', () => {
+  const searchButtonRegistrados = document.getElementById('searchButtonRegistrado');
 
+  if (searchButtonRegistrados) {
+    searchButtonRegistrados.addEventListener('click', () => {
+      const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
+      const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
+      const contractNumberElement = document.getElementById('contractNumberRegistrados');
 
-  if (!contractNumber) {
-    alert('Por favor, insira o número do contrato.');
-    return;
+      if (!contractNumberElement) {
+        console.error('Element with ID "contractNumberRegistrados" not found.');
+        return;
+      }
+
+      const contractNumber = (contractNumberElement.value).padStart(6, '0');
+
+      if (!contractNumber) {
+        alert('Por favor, insira o número do contrato.');
+        return;
+      }
+
+      showLoadingSpinner();
+      searchValueMotoBoyContrato(spreadsheetId, range, contractNumber, (result) => {
+        console.log('Registros encontrados:', result);
+        const resultContainer = document.getElementById('result-registrados');
+        displayResultsMotoboy(resultContainer, result);
+        hideLoadingSpinner();
+      });
+    });
+  } else {
+    console.error('Element with ID "searchButtonRegistrado" not found.');
   }
-  showLoadingSpinner();
-  searchValueMotoBoyContrato(spreadsheetId, range, contractNumber, (result) => {
-    console.log('Registros encontrados:', result);
-    const resultContainer = document.getElementById('result-registrados');
-    displayResultsMotoboy(resultContainer, result);
-    hideLoadingSpinner()
-
 });
 
 
-});
+
+
 function searchValueMotoBoyContrato(spreadsheetId, range, contrato, callback) {
   const login= document.getElementById('output-username').textContent.trim();
   const motoboy =   login.charAt(0).toUpperCase() + login.slice(1).toLowerCase(); 
@@ -575,11 +628,11 @@ function searchValueMotoBoyContrato(spreadsheetId, range, contrato, callback) {
       const values = result.values;
 
       if (values && values.length > 0) {
-        let targetRows = values.filter(row => row[10] === motoboy); // Filtra pelo motoboy
+        let targetRows = values.filter(row => row[11] === motoboy); // Filtra pelo motoboy
 
         if (contrato) {
           // Filtra pela data, se fornecida
-          targetRows = targetRows.filter(row => row[0] === contrato);
+          targetRows = targetRows.filter(row => row[1] === contrato);
         }
 
         if (targetRows.length > 0) {
@@ -587,12 +640,24 @@ function searchValueMotoBoyContrato(spreadsheetId, range, contrato, callback) {
           if (callback) callback(targetRows);
         } else {
           // Nenhum registro encontrado
-          console.log(`Nenhum registro para o motoboy '${motoboy}' e data '${contrato}' foi encontrado.`);
+          console.log(`Nenhum registro encontrado sobre o '${contrato}'`);
           hideLoadingSpinner()
-          showCustomMessage("custom-message-contrato-nao-localizado")
+          Swal.fire({
+            title: `Nenhum registro encontrado sobre o '${contrato}'`,
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#073261', // Cor do botão de confirmação
+            confirmButtonText: 'Ok',
+            confirmButtonTextColor: "#fff",
+            customClass: {
+                title: 'sweetalert-font', // Classe CSS para o título
+                htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+                confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+                container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+            }
+        });
         // Aguarda 3 segundos antes de recarregar a página
         setTimeout(function() {
-          hideCustomMessage("custom-message-contrato-nao-localizado")
         }, 1500); // 3000 milissegundos = 3 segundos
         }
       } else {
@@ -607,4 +672,129 @@ function searchValueMotoBoyContrato(spreadsheetId, range, contrato, callback) {
   });
 }
 
+function searchValueDataPainel(spreadsheetId, range, date, callback) {
 
+  gapi.load('client', () => {
+    gapi.client.init({
+      apiKey: API_KEY,
+      discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+    }).then(() => {
+      return gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: spreadsheetId,
+        range: range,
+      });
+    }).then((response) => {
+      const result = response.result;
+      const values = result.values;
+
+      if (values && values.length > 0) {
+          let targetRows = values.filter(row => row[0] === date); // Filtra pelo motoboy
+  
+          if (targetRows.length > 0) {
+            // Registros encontrados, chama o callback com os valores
+            if (callback) callback(targetRows);
+          } else {
+            // Nenhum registro encontrado
+            console.log(`Nenhum registro para o motoboy '${date}' e data '${date}' foi encontrado.`);
+            hideLoadingSpinner()
+            Swal.fire({
+              title: `Nenhum registro encontrado na '${date}' .`,
+              icon: 'warning',
+              showCancelButton: false,
+              confirmButtonColor: '#073261', // Cor do botão de confirmação
+              confirmButtonText: 'Ok',
+              confirmButtonTextColor: "#fff",
+              customClass: {
+                  title: 'sweetalert-font', // Classe CSS para o título
+                  htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+                  confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+                  container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+              }
+          });
+          // Aguarda 3 segundos antes de recarregar a página
+          setTimeout(function() {
+          }, 1500); // 3000 milissegundos = 3 segundos
+  
+          }
+        } else {
+          // Nenhuma linha na planilha
+          console.log('Nenhuma linha na planilha.');
+          alert('Nenhuma linha na planilha.');
+        }
+      }).catch((err) => {
+        console.error('Erro: ', err.result.error.message);
+        alert('Erro: ', err.result.error.message);
+      });
+    });
+  }
+
+function displayResultsDataPainel(container, data) {
+  container.innerHTML = ''; // Clear previous results
+  var index = 0;
+  data.forEach(item => {
+      ++index;
+      const row = document.createElement('div');
+      row.className = 'result-row';
+
+      const contractDiv = document.createElement('div');
+      contractDiv.className = 'result-item';
+      contractDiv.innerHTML = `<span>Contrato:</span> ${item[0]}`;
+
+      const nameDiv = document.createElement('div');
+      nameDiv.className = 'result-item result-item-name';
+      nameDiv.innerHTML = `<span>Nome:</span> ${item[2]}`;
+
+      const dateDiv = document.createElement('div');
+      dateDiv.className = 'result-item result-data';
+      dateDiv.innerHTML = `<span>Data de Ativação:</span> ${item[7]}`;
+
+      // Create the icon element with a dynamic ID
+      const iconDiv = document.createElement('div');
+      iconDiv.className = 'result-item result-icon';
+      const iconId = `icone-${index}`;
+      const outputId = `output-registro-${index}`;
+      iconDiv.innerHTML = `<i id="${iconId}" class="fa fa-copy" onclick="copyText('${outputId}', '${iconId}')"></i>`;
+      console.log(`<i id="${iconId}" class="fa fa-copy" onclick="copyText('${outputId}', '${iconId}')"></i>`)
+    
+       // Create the icon element with a dynamic ID
+       const texObsDiv = document.createElement('div');
+       texObsDiv.className = 'result-item result-item-obsercacao';
+       texObsDiv.innerHTML = `<span>Observação:</span><br><p id = ${outputId} >${item[11].replace(/\n/g, '<br>')}</p> `;
+ 
+
+
+      row.appendChild(contractDiv);
+      row.appendChild(nameDiv);
+      row.appendChild(texObsDiv);
+      row.appendChild(dateDiv);
+      row.appendChild(iconDiv);
+
+
+
+      // Adicionar evento de clique a cada linha
+      row.addEventListener('click', () => showPopup());
+
+      container.appendChild(row);
+  });
+}
+function copyText(idText, idIcone) {
+  // Cria um elemento de input temporário
+    // Cria um range de seleção
+  var range = document.createRange();
+    // Seleciona o conteúdo da div
+  range.selectNode(document.getElementById(idText));
+    // Remove qualquer seleção prévia
+  window.getSelection().removeAllRanges();
+    // Adiciona o range de seleção atual
+  window.getSelection().addRange(range);
+    // Executa o comando de cópia
+  document.execCommand('copy');
+    // Remove a seleção
+  window.getSelection().removeAllRanges();
+    // Muda o ícone
+  var icon = document.getElementById(idIcone);
+  icon.classList.remove('fa-copy');
+  icon.classList.add('fa-check');
+  
+
+}
