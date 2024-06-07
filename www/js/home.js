@@ -738,15 +738,15 @@ function displayResultsDataPainel(container, data) {
 
       const contractDiv = document.createElement('div');
       contractDiv.className = 'result-item';
-      contractDiv.innerHTML = `<span>Contrato:</span> ${item[0]}`;
+      contractDiv.innerHTML = `<span>Contrato:</span> ${item[1]}`;
 
       const nameDiv = document.createElement('div');
       nameDiv.className = 'result-item result-item-name';
-      nameDiv.innerHTML = `<span>Nome:</span> ${item[2]}`;
+      nameDiv.innerHTML = `<span>Nome:</span> ${item[3]}`;
 
       const dateDiv = document.createElement('div');
       dateDiv.className = 'result-item result-data';
-      dateDiv.innerHTML = `<span>Data de Ativação:</span> ${item[7]}`;
+      dateDiv.innerHTML = `<span>Data do Registro:</span> ${item[0]}`;
 
       // Create the icon element with a dynamic ID
       const iconDiv = document.createElement('div');
@@ -759,7 +759,7 @@ function displayResultsDataPainel(container, data) {
        // Create the icon element with a dynamic ID
        const texObsDiv = document.createElement('div');
        texObsDiv.className = 'result-item result-item-obsercacao';
-       texObsDiv.innerHTML = `<span>Observação:</span><br><p id = ${outputId} >${item[11].replace(/\n/g, '<br>')}</p> `;
+       texObsDiv.innerHTML = `<span>Observação:</span><br><p id = ${outputId} >${item[12].replace(/\n/g, '<br>')}</p> `;
  
 
 
