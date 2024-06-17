@@ -14,11 +14,23 @@ document.getElementById('searchButton').addEventListener('click', () => {
     console.log(contratoBuscar);
     showLoadingSpinner();
     searchValue(SPREADSHEET_ID, RANGE, contratoBuscar, displayResult);
+    // Aguarda 3 segundos antes de recarregar a página
+    setTimeout(function() {
+      hideLoadingSpinner()
+
+    }, 1500); // 3000 milissegundos = 3 segundos
   }else if (contractNumber.length > 6){
     const cpfBuscar = contractNumber.padStart(11, '0');
     console.log(cpfBuscar);
     showLoadingSpinner();
     searchValueCPF(SPREADSHEET_ID, RANGE, cpfBuscar, displayResult);
+     // Aguarda 3 segundos antes de recarregar a página
+     setTimeout(function() {
+      hideLoadingSpinner()
+
+    }, 1500); // 3000 milissegundos = 3 segundos
+
+    
   }
   
 })
