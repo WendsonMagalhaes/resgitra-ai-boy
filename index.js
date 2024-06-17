@@ -11,11 +11,11 @@ var path = require('path');
 const app = express();
 
 var loginAdriano = "adriano";
-var passwordAdriano = "1111";
+var passwordAdriano = "762018";
 var loginDurval = "durval";
-var passwordDurval = "2222";
+var passwordDurval = "142027";
 var loginOscar = "oscar";
-var passwordOscar = "3333";
+var passwordOscar = "230277";
 var loginWendson = "wendson";
 var passwordWendson = "4444";
 var usuario;
@@ -45,21 +45,21 @@ app.use('/css', express.static(path.join(__dirname, 'css')));
 app.post('/', (req, res) => {
     let errorMessage = ""; // Inicializa a mensagem de erro como uma string vazia
 
-    if (req.body.password == passwordAdriano && req.body.login.toLowerCase() == loginAdriano) {
+    if (req.body.password == passwordAdriano && req.body.login.toLowerCase().trim() == loginAdriano) {
         req.session.login = loginAdriano;
         usuario = loginAdriano.charAt(0).toUpperCase() + loginAdriano.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
 
-    } else if (req.body.password == passwordDurval && req.body.login.toLowerCase() == loginDurval) {
+    } else if (req.body.password == passwordDurval && req.body.login.toLowerCase().trim() == loginDurval) {
         req.session.login = loginDurval;
         usuario = loginDurval.charAt(0).toUpperCase() + loginDurval.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
     }
-    else if (req.body.password == passwordOscar && req.body.login.toLowerCase() == loginOscar) {
+    else if (req.body.password == passwordOscar && req.body.login.toLowerCase().trim() == loginOscar) {
         req.session.login = loginOscar;
         usuario = loginOscar.charAt(0).toUpperCase() + loginOscar.slice(1).toLowerCase(); 
         res.render('home', { login: usuario });
-    } else if (req.body.password == passwordWendson && req.body.login.toLowerCase() == loginWendson) {
+    } else if (req.body.password == passwordWendson && req.body.login.toLowerCase().trim() == loginWendson) {
         req.session.login = loginWendson;
         usuario = loginWendson.charAt(0).toUpperCase() + loginWendson.slice(1).toLowerCase(); 
         res.render('controle-registros', { login: usuario });

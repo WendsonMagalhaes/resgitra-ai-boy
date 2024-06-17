@@ -4,15 +4,22 @@ const API_KEY = 'AIzaSyB_rfYHUzFP0hF5dmQPUVxK88BoVF74HJo'; // Substitua 'YOUR_AP
 
 document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('searchButton').addEventListener('click', () => {
-  const contractNumber = (document.getElementById('contractNumber').value).padStart(6, '0');
-  console.log(contractNumber);
 
+  const contractNumber = (document.getElementById('contractNumber').value);
   if (!contractNumber) {
     alert('Por favor, insira o número do contrato.');
     return;
+  }else if (contractNumber.length <= 6){
+    const contratoBuscar = contractNumber.padStart(6, '0');
+    console.log(contratoBuscar);
+    showLoadingSpinner();
+    searchValue(SPREADSHEET_ID, RANGE, contratoBuscar, displayResult);
+  }else if (contractNumber.length > 6){
+    const cpfBuscar = contractNumber.padStart(11, '0');
+    console.log(cpfBuscar);
+    showLoadingSpinner();
+    searchValueCPF(SPREADSHEET_ID, RANGE, cpfBuscar, displayResult);
   }
-  showLoadingSpinner();
-  searchValue(SPREADSHEET_ID, RANGE, contractNumber, displayResult);
   
 })
 });
@@ -90,7 +97,70 @@ function searchValue(spreadsheetId, range, targetValue, callback) {
 
       });
     });
-  }
+}
+
+function searchValueCPF(spreadsheetId, range, targetValue, callback) {
+  gapi.load('client', () => {
+      gapi.client.init({
+          apiKey: API_KEY,
+          discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"],
+      }).then(() => {
+          return gapi.client.sheets.spreadsheets.values.get({
+              spreadsheetId: spreadsheetId,
+              range: range,
+          });
+      }).then((response) => {
+          const result = response.result;
+          const values = result.values;
+
+          if (values && values.length > 0) {
+              // Implementação da busca linear
+              let targetRowIndex = -1;
+              for (let i = 0; i < values.length; i++) {
+                  if (values[i][5] === targetValue) { // Assumindo que a primeira coluna contém os valores a serem buscados
+                      targetRowIndex = i;
+                      break;
+                  }
+              }
+
+              if (targetRowIndex !== -1) {
+                  // Valor encontrado, chama o callback com o valor
+                  const targetRow = values[targetRowIndex];
+                  if (callback) callback(targetRow);
+              } else {
+                  // Valor não encontrado
+                  console.log(`Contrato '${targetValue}' não encontrado.`);
+                  hideLoadingSpinner();
+                  Swal.fire({
+                      title: `Contrato '${targetValue}' não encontrado.`,
+                      icon: 'warning',
+                      showCancelButton: false,
+                      confirmButtonColor: '#073261', // Cor do botão de confirmação
+                      confirmButtonText: 'Ok',
+                      confirmButtonTextColor: "#fff",
+                      customClass: {
+                          title: 'sweetalert-font', // Classe CSS para o título
+                          htmlContainer: 'sweetalert-font', // Classe CSS para o texto
+                          confirmButton: 'btn-arredondado', // Classe CSS para o botão de confirmação
+                          container: 'sweetalert-container' // Classe CSS para a janela do SweetAlert
+                      }
+                  });
+                  // Aguarda 3 segundos antes de recarregar a página
+                  setTimeout(function() {
+                  }, 1500); // 3000 milissegundos = 3 segundos
+              }
+          } else {
+              // Nenhum valor na planilha
+              console.log('Nenhum valor na planilha.');
+              alert('Nenhum valor na planilha.');
+          }
+      }, (err) => {
+          console.error('Error: ', err.result.error.message);
+          alert('Error: ', err.result.error.message);
+      });
+  });
+}
+
   
   function updateValues(spreadsheetId, range, valueInputOption, _values, callback) {
     let values = [
@@ -317,7 +387,7 @@ async function enviarDados() {
         hideLoadingSpinner()
         Swal.fire({
           title: `Negociação Salva com Sucesso`,
-          icon: 'sucess',
+          icon: 'success',
           showCancelButton: false,
           confirmButtonColor: '#073261', // Cor do botão de confirmação
           confirmButtonText: 'Ok',
