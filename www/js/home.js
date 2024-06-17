@@ -462,6 +462,7 @@ const propostasDescontos = {
     2: {
       0: [
         { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
         { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuada, porém não foi feita nenhuma negociação' },
         ],
         1: [{ desconto: "Parcelamento em 2 Vezes", descricao: 'Ofertado parcelamento em 2 vezes' },
@@ -490,6 +491,8 @@ const propostasDescontos = {
     3: {
       0: [
         { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
+        { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
         { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuada, porém não foi feita nenhuma negociação' },
         ],
         1: [{ desconto: "Parcelamento em 3 Vezes", descricao: 'Ofertado parcelamento em 3 vezes' },
@@ -521,6 +524,8 @@ const propostasDescontos = {
     4: {
       0: [
         { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
+        { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
         { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuada, porém não foi feita nenhuma negociação' },
         ],
         1: [{ desconto: "Parcelamento em 4 Vezes", descricao: 'Ofertado parcelamento em 4 vezes' },
@@ -552,6 +557,8 @@ const propostasDescontos = {
     5: {
       0: [
         { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
+        { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
         { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuada, porém não foi feita nenhuma negociação' },
         ],
       1: [{ desconto: "Parcelamento em 5 Vezes", descricao: 'Ofertado parcelamento em 5 vezes' },
@@ -583,6 +590,8 @@ const propostasDescontos = {
     6: {
       0: [
         { desconto: "Sem Desconto", descricao: 'Cobrança efetuada sem negociação' },
+        { desconto: "5% de Desconto", descricao: 'Ofertado desconto de 5%' },
+        { desconto: "10% de Desconto", descricao: 'Ofertado desconto de 10%' },
         { desconto: "Desconto não Ofertado", descricao: 'Cobrança efetuada, porém não foi feita nenhuma negociação' },
         ],
       1: [{ desconto: "Parcelamento na Nº de Parcelas em Aberto", descricao: 'Ofertado parcelamento no número de parcelas em aberto' },
