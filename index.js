@@ -20,7 +20,12 @@ var loginWendson = "wendson";
 var passwordWendson = "4444";
 var usuario;
 
-app.use(session({ secret: '09r78cn82b3r89x1@38xy4184' }));
+app.use(session({
+    secret: '09r78cn82b3r89x1@38xy4184',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -47,24 +52,24 @@ app.post('/', (req, res) => {
 
     if (req.body.password == passwordAdriano && req.body.login.toLowerCase().trim() == loginAdriano) {
         req.session.login = loginAdriano;
-        usuario = loginAdriano.charAt(0).toUpperCase() + loginAdriano.slice(1).toLowerCase(); 
+        usuario = loginAdriano.charAt(0).toUpperCase() + loginAdriano.slice(1).toLowerCase();
         res.render('home', { login: usuario });
 
     } else if (req.body.password == passwordDurval && req.body.login.toLowerCase().trim() == loginDurval) {
         req.session.login = loginDurval;
-        usuario = loginDurval.charAt(0).toUpperCase() + loginDurval.slice(1).toLowerCase(); 
+        usuario = loginDurval.charAt(0).toUpperCase() + loginDurval.slice(1).toLowerCase();
         res.render('home', { login: usuario });
     }
     else if (req.body.password == passwordOscar && req.body.login.toLowerCase().trim() == loginOscar) {
         req.session.login = loginOscar;
-        usuario = loginOscar.charAt(0).toUpperCase() + loginOscar.slice(1).toLowerCase(); 
+        usuario = loginOscar.charAt(0).toUpperCase() + loginOscar.slice(1).toLowerCase();
         res.render('home', { login: usuario });
     } else if (req.body.password == passwordWendson && req.body.login.toLowerCase().trim() == loginWendson) {
         req.session.login = loginWendson;
-        usuario = loginWendson.charAt(0).toUpperCase() + loginWendson.slice(1).toLowerCase(); 
+        usuario = loginWendson.charAt(0).toUpperCase() + loginWendson.slice(1).toLowerCase();
         res.render('controle-registros', { login: usuario });
     }
-     else {
+    else {
         errorMessage = "Login ou senha incorretos. Por favor, tente novamente."; // Define a mensagem de erro
         res.render('index', { errorMessage: errorMessage }); // Passa a mensagem de erro para o modelo
     }
