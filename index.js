@@ -75,6 +75,20 @@ app.post('/', (req, res) => {
     }
 
 });
+// Middleware para proteger rotas que requerem autenticação
+function checkAuth(req, res, next) {
+    if (req.session && req.session.login) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
+
+// Rota protegida de exemplo
+app.get('/home', checkAuth, (req, res) => {
+    const usuario = req.session.login.charAt(0).toUpperCase() + req.session.login.slice(1).toLowerCase();
+    res.render('home', { login: usuario });
+});
 app.get('/', (req, res) => {
     const errorMessage = req.query.error || ""; // Obtém a mensagem de erro da query string ou define como uma string vazia se não houver erro
     res.render('index', { errorMessage: errorMessage });
