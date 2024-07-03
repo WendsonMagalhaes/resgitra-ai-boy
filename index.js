@@ -6,7 +6,8 @@ const router = express.Router();
 const registradosRouter = require('./www/js/registros');
 
 
-const port = 3030;
+const port = 3040;
+const host = '0.0.0.0';
 var path = require('path');
 const app = express();
 
@@ -38,7 +39,7 @@ app.use('/registrados', registradosRouter);
 
 
 // Inicia o servidor
-app.listen(port, '172.30.5.4', () => {
+app.listen(port, host, () => {
     console.log(`Server running at http://172.30.5.4:${port}`);
 });
 
