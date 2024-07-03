@@ -3,14 +3,12 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const { getAuthSheets } = require('./auth'); // Importe a função getAuthSheets do seu arquivo de autenticação
 const router = express.Router();
-const registradosRouter = require('./www/js/registros');
 
 
-const port = 3040;
+const port = 3032;
 const host = '0.0.0.0';
 var path = require('path');
 const app = express();
-
 var loginAdriano = "adriano";
 var passwordAdriano = "762018";
 var loginDurval = "durval";
@@ -35,7 +33,6 @@ app.set('view engine', 'html');
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, '/views'));
 app.use('/', router); // Use o roteador express
-app.use('/registrados', registradosRouter);
 
 
 // Inicia o servidor
