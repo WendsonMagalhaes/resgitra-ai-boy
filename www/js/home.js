@@ -1,5 +1,5 @@
 const SPREADSHEET_ID = '1vn_5JYkVxWK6i3UnhuvVpg11Eb7sdbCVWRVW5ha-hCg';
-const RANGE = 'Inadimplencia!A:n';
+const RANGE = 'Inadimplencia!A:Z';
 const API_KEY = 'AIzaSyB_rfYHUzFP0hF5dmQPUVxK88BoVF74HJo'; // Substitua 'YOUR_API_KEY' pela sua chave da API
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -284,6 +284,25 @@ function displayResultsMotoboy(container, data) {
 function showPopup(data) {
   const popup = document.getElementById('popup-dados-registro');
   const popupContent = document.getElementById('popup-content');
+  var pago;
+  var status_registro;
+
+  if (data[20] === ""){
+    pago = "Aguardando Pagamento"
+  }else {
+    pago = "Pago"
+  }
+  if (data[21] === "FORA DO PRAZO"){
+    status_registro = "Fora do Prazo"
+  }else if (data[21] === "DENTRO DO PRAZO"){
+    status_registro = "Dentro do Prazo"
+  }else {
+    status_registro = "Planilhado"
+
+  }
+  
+  
+
 
   popupContent.innerHTML = `
       <div><strong>Contrato:</strong> ${data[1]}</div>
@@ -294,6 +313,9 @@ function showPopup(data) {
       <div><strong>Data de Ativação:</strong> ${data[8]}</div>
       <div><strong>Parcelas em Atraso:</strong> ${data[9]}</div>
       <div><strong>Total do Débito:</strong> ${data[10]}</div>
+      <div><strong>Status do Pagamento:</strong> ${pago}</div>
+      <div><strong>Data de Venciameto do Registro:</strong> ${data[15]}</div>
+      <div><strong>Status do Registro:</strong> ${status_registro}</div>
       <div><strong>Motoboy:</strong> ${data[11]}</div>
       <div><strong>Observações: <br></strong> ${data[12].replace(/\n/g, '<br>')}</div>
   `;
@@ -376,8 +398,10 @@ async function enviarDados() {
               document.getElementById('output-username').textContent.trim(),
             "Cobrança realizada pelo Motoboy " + document.getElementById('output-username').textContent.trim() +
              '\n' +  "Status do Cliente: Comprometeu-se a ir à loja ou entrar em contato com a Central."+ '\n' +"Negociação:" + '\n' + selectedDescriptions
-             + '\n' + "Observação:  Considerar apenas uma proposta de negociação."  + '\n' + '\n' +  document.getElementById('output-username').textContent.trim() +" - " + getCurrentDate()
+             + '\n' + "Observação:  Considerar apenas uma proposta de negociação."  + '\n' + '\n' +  document.getElementById('output-username').textContent.trim() +" - " + getCurrentDate(),
+             "P"
             ]
+            
     };
     try {
         console.log('Enviando solicitação para adicionar nova linha:', JSON.stringify(dados));
@@ -691,7 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchButtonRegistrados) {
     searchButtonRegistrados.addEventListener('click', () => {
       const spreadsheetId = '1qANHDNI6jSHg5JX1hWzLKqW5I2Hohe792ZNOjhcDOQM';
-      const range = 'A1:N100'; // Substitua pelo intervalo de células onde deseja pesquisar
+      const range = 'A1:Z'; // Substitua pelo intervalo de células onde deseja pesquisar
       const contractNumberElement = document.getElementById('contractNumberRegistrados');
 
       if (!contractNumberElement) {
@@ -800,7 +824,7 @@ function searchValueDataPainel(spreadsheetId, range, date, callback) {
       const values = result.values;
 
       if (values && values.length > 0) {
-          let targetRows = values.filter(row => row[0] === date); // Filtra pelo motoboy
+          let targetRows = values.filter(row => row[0] === date &&  row[13] === "P"); // Filtra pelo motoboy
   
           if (targetRows.length > 0) {
             // Registros encontrados, chama o callback com os valores
@@ -846,11 +870,20 @@ function displayResultsDataPainel(container, data) {
   data.forEach(item => {
       ++index;
       const row = document.createElement('div');
-      row.className = 'result-row';
+      console.log(index);
+      console.log(item[13])
+      row.className = 'result-row-painel';
+
+      // Create the icon element with a dynamic ID
+      const iconContratoDiv = document.createElement('div');
+      iconContratoDiv.className = 'result-item result-contrato-icon';
+      const iconContratoId = `icone-contrato-${index}`;
+      const outputContratoId = `output-registro-contrato-${index}`;
+      iconContratoDiv.innerHTML = `<i id="${iconContratoId}" class="fa fa-copy" onclick="copyText('${outputContratoId}', '${iconContratoId}')"></i>`;
 
       const contractDiv = document.createElement('div');
       contractDiv.className = 'result-item';
-      contractDiv.innerHTML = `<span>Contrato:</span> ${item[1]}`;
+      contractDiv.innerHTML = `<span>Contrato: </span><span id="${outputContratoId}">${item[1]}</span> `;
 
       const nameDiv = document.createElement('div');
       nameDiv.className = 'result-item result-item-name';
@@ -866,16 +899,22 @@ function displayResultsDataPainel(container, data) {
       const iconId = `icone-${index}`;
       const outputId = `output-registro-${index}`;
       iconDiv.innerHTML = `<i id="${iconId}" class="fa fa-copy" onclick="copyText('${outputId}', '${iconId}')"></i>`;
-      console.log(`<i id="${iconId}" class="fa fa-copy" onclick="copyText('${outputId}', '${iconId}')"></i>`)
     
        // Create the icon element with a dynamic ID
        const texObsDiv = document.createElement('div');
        texObsDiv.className = 'result-item result-item-obsercacao';
        texObsDiv.innerHTML = `<span>Observação:</span><br><p id = ${outputId} >${item[12].replace(/\n/g, '<br>')}</p> `;
+
+       // Create the icon element with a dynamic ID
+       const statusRegistroDiv = document.createElement('div');
+       statusRegistroDiv.className = 'result-item result-item-status';
+       statusRegistroDiv.innerHTML = `<span>Resgistro:</span><br><p id = ${outputId} >${item[13].replace(/\n/g, '<br>')}</p> `;
  
 
 
       row.appendChild(contractDiv);
+      row.appendChild(iconContratoDiv);
+
       row.appendChild(nameDiv);
       row.appendChild(texObsDiv);
       row.appendChild(dateDiv);
@@ -883,9 +922,7 @@ function displayResultsDataPainel(container, data) {
 
 
 
-      // Adicionar evento de clique a cada linha
-      row.addEventListener('click', () => showPopup());
-
+      
       container.appendChild(row);
   });
 }
@@ -907,6 +944,8 @@ function copyText(idText, idIcone) {
   var icon = document.getElementById(idIcone);
   icon.classList.remove('fa-copy');
   icon.classList.add('fa-check');
+ 
+  
   
 
 }

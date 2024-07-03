@@ -37,10 +37,12 @@ app.use('/', router); // Use o roteador express
 app.use('/registrados', registradosRouter);
 
 
-
-app.listen(process.env.PORT || port, () => {
-    console.log('SERVIDOR RODANDO')
+// Inicia o servidor
+app.listen(port, '172.30.5.4', () => {
+    console.log(`Server running at http://172.30.5.4:${port}`);
 });
+
+
 app.use(express.static(path.join(__dirname, 'www')));
 app.use('/lib', express.static(path.join(__dirname, 'lib')));
 app.use('/css', express.static(path.join(__dirname, 'css')));
