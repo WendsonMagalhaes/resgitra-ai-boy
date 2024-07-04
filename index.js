@@ -6,6 +6,8 @@ const router = express.Router();
 const registradosRouter = require('./www/js/registros');
 
 
+
+
 const port = 3030;
 var path = require('path');
 const app = express();
@@ -37,6 +39,10 @@ app.use('/', router); // Use o roteador express
 app.use('/registrados', registradosRouter);
 
 
+ /*** 
+app.listen(port, '172.30.5.4', () => {
+    console.log(`Server running at http://172.30.5.4:${port}`);
+});*/
 // Inicia o servidor
 app.listen(process.env.PORT || port, () => {
     console.log('SERVIDOR RODANDO')
