@@ -223,6 +223,7 @@ function displayResult(row) {
     document.getElementById('output-telefone').textContent = row[13];
     document.getElementById('output-forma-de-pagamento').textContent = row[1];
     document.getElementById('output-data-ativacao').textContent = row[11];
+    document.getElementById('output-venc-antigo').textContent = row[3];
     document.getElementById('output-total-parcelas').textContent = row[2];
     document.getElementById('output-total-debito').textContent = row[6];
 
