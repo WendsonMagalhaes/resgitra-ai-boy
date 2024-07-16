@@ -152,19 +152,12 @@ input[type="text"] {
 }
 .container-contrato {
     display: grid;
-    grid-template-columns: 50% 50%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 10% 20% 10% 20%; /* Define duas colunas de 30% cada */
     gap: 20px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
-    margin-left: -100px; /* Adiciona uma margem à esquerda */
-    margin-bottom: 5px;
+    margin-left: -15px; /* Adiciona uma margem à esquerda */
 
 
-
-}
-#contrato , #cliente{
-    margin-top: -20px;
-    width: 30%;
-    margin-left: 160px;
 }
 
 #label-contrato, #input-contrato, #label-nome, #input-nome {
@@ -175,61 +168,34 @@ input[type="text"] {
 }
 .container-nome {
     display: grid;
-    grid-template-columns: 90%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 8% 90%; /* Define duas colunas de 30% cada */
     gap: 20px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -15px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
-    margin-bottom: 5px;
 
-
-}
-#label-nome{
-    margin-left: -220px;
-}
-#nome{
-    margin-top: -20px;
-    width: 90%;
-    margin-left: 80px;
 }
 .container-endereco {
     display: grid;
-    grid-template-columns: 90%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 8% 90%; /* Define duas colunas de 30% cada */
     gap: 20px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -15px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
-    margin-bottom: 5px;
 
-    
 }
-#label-endereco{
-    margin-left: -205px;
-}
-#endereco{
-    margin-top: -20px;
-    width: 90%;
-    margin-left: 80px;
-}
-.input-group {
-    display: flex;
-    flex-direction: column; /* Coloca o label acima do input */
-    flex-grow: 1; /* Faz o input crescer para preencher o espaço disponível */
-    min-width: 0; /* Redefine a largura mínima para permitir a flexibilidade do grid */
-  }
+
 
 #label-endereco, #input-endereco, #label-bairro, #input-bairro {
     width: 100%; /* Necessário para garantir que os elementos preencham suas colunas */
 }
 .container-forma-de-pagamento {
     display: grid;
-    grid-template-columns: 20% 30% 30%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 18% 5% 18% 15% 18% 15%; /* Define duas colunas de 30% cada */
     gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
     margin-left: -5px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
-    margin-bottom: 5px;
-
 
 
 }
@@ -237,55 +203,26 @@ input[type="text"] {
 #label-forma-de-pagamento, #input-forma-de-pagamento, #label-data-ativacao, #input-data-ativacao {
     width: 100%; /* Necessário para garantir que os elementos preencham suas colunas */
 }
-#forma-de-pagamento{
-    margin-top: -20px;
-    width: 20%;
-    margin-left: 80px;
-
-}
-#data-ativacao, #venc-antigo{
-    margin-top: -20px;
-    width: 70%;
-    margin-left: 80px;
-}
 
 .container-debito {
     display: grid;
-    grid-template-columns: 40% 40%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 28% 10% 25% 30%; /* Define duas colunas de 30% cada */
     gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
-    margin-left: -80px; /* Adiciona uma margem à esquerda */
+    margin-left: -5px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
-    margin-bottom: 5px;
 
 
-
-}
-#total-debito{
-    margin-top: -20px;
-    width: 70%;
-    margin-left: 80px;
-}
-#total-parcelas{
-    margin-top: -20px;
-    width: 10%;
-    margin-left: 150px;
 }
 .container-bairro {
     display: grid;
-    grid-template-columns: 45% 45%; /* Define duas colunas de 30% cada */
+    grid-template-columns: 10% 40% 10% 30%; /* Define duas colunas de 30% cada */
     gap: 10px; /* Espaçamento entre as colunas, opcional */
     justify-content: start; /* Alinha as colunas à esquerda */
-    margin-left: -120px; /* Adiciona uma margem à esquerda */
+    margin-left: -5px; /* Adiciona uma margem à esquerda */
     margin-top: -10px;
-    margin-bottom: 5px;
 
 
-}
-#bairro, #telefone{
-    margin-top: -20px;
-    width: 50%;
-    margin-left: 180px;
 }
 
 #label-total-parcelas, #input-total-parcelas, #label-otal-debito, #input-otal-debito {
