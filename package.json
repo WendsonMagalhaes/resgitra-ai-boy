@@ -1,21 +1,19 @@
 {
-  "name": "registra-ai-boy",
+  "name": "projeto-to-do-list",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npx nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^3.1.10",
+    "axios": "^1.7.2",
     "express": "^4.19.2",
-    "express-session": "^1.18.0",
-    "googleapis": "^137.1.0",
-    "hbs": "^4.2.0"
+    "pg": "^8.12.0",
+    "sqlite3": "^5.1.7"
   },
-  "devDependencies": {},
   "description": ""
 }
