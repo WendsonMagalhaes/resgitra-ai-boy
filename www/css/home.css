@@ -276,8 +276,8 @@ input[type="text"] {
   }
 
   .card {
-    background-color: #073261;
     /* Um tom de azul claro */
+    background-color: #073261;
     border: 1px solid #073261;  /* Azul mais escuro para o contorno */
     border-radius: 8px;
     padding: 16px;
@@ -291,6 +291,18 @@ input[type="text"] {
     font-weight: 700;
     font-style: normal;
 }
+.card.red {
+    background-color: red;
+    color: white;
+    border: 1px solid red; 
+
+  }
+  
+  .card.navi-blue {
+    background-color: #073261;
+    color: white;
+    border: 1px solid #073261; 
+  }
 .username::first-letter {
     text-transform: uppercase;
   
