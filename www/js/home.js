@@ -235,11 +235,11 @@ function displayResult(row) {
   if (parcelas >= 6) {
     parcelas = 6;
   }
-  var descontoAnterior = row[14];
-  if (descontoAnterior === "RECEBEU DESCONTO EM MENOS DE 6 MESES") {
-    anoContrato = 0;
-    parcelas = 0;
-  }
+  //var descontoAnterior = row[14];
+ // if (descontoAnterior === "RECEBEU DESCONTO EM MENOS DE 6 MESES") {
+  //  anoContrato = 0;
+ //   parcelas = 0;
+  //}
   const descontos = obterDescontos(parcelas, anoContrato);
 
   const cardsContainer = document.getElementById('cards-container');
